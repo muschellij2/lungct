@@ -1,5 +1,6 @@
 #' @title Reduction of Scan Dimensions from Mask
-#' Reduces the dimensions of a scan based on extent of a mask. Combines
+#' @description Reduces the dimensions of a scan based on extent of
+#' a mask. Combines
 #' \code{\link{getEmptyImageDimensions}} and
 #' \code{\link{applyEmptyImageDimensions}}.
 #'

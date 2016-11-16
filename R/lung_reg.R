@@ -1,8 +1,8 @@
 #' @title CT Lung Registration
 #' @description Wrapper of regsitration function for CT scans of the lung
 #'
-#' @param base Baseline scan - filename or \code{\link{"antsImage-class"}}
-#' @param follow Follow up scan - filename or \code{\link{"antsImage-class"}}.
+#' @param base Baseline scan - filename or \code{antsImage}
+#' @param follow Follow up scan - filename or \code{antsImage}
 #' Registered to the baseline scan.
 #' @param base_mask Baseline mask - binary image for baseline.
 #' @param follow_mask Follow up mask - binary image for follow up scan
@@ -14,19 +14,20 @@
 #' @param ... additional options to pass to \code{\link{registration}}
 #'
 #' @return List of output, same as \code{\link{registration}}, with transforms
-#' and output files, as well as an indicator for \code{add_1025} and
-#' value added to the data
+#' and output files, as well as an indicator for \code{add_1025}, the
+#' value added to the data, as well as the baseline scan
 #' @export
 #'
-#' @importFrom extrantsr registration
-lung_reg = function(base,
-                    follow,
-                    base_mask,
-                    follow_mask,
-                    add_1025 = TRUE,
-                    interpolator = "LanczosWindowedSinc",
-                    typeofTransform = "SyN",
-                    ...) {
+#' @importFrom extrantsr registration check_nifti
+lung_reg = function(
+  base,
+  follow,
+  base_mask,
+  follow_mask,
+  add_1025 = TRUE,
+  interpolator = "LanczosWindowedSinc",
+  typeofTransform = "SyN",
+  ...) {
 
   L_base = reduce_scan(img = base, mask = base_mask)
   L_fup = reduce_scan(img = follow, mask = follow_mask)
@@ -55,5 +56,9 @@ lung_reg = function(base,
   )
   reg$add_1025 = add_1025
   reg$added_value = add_val
+
+  L_base = extrantsr::check_nifti(L_base)
+  reg$fixed = L_base
+
   return(reg)
 }
