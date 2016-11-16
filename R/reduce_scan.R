@@ -20,7 +20,9 @@ reduce_scan = function(img, mask) {
   mask = ANTsR::as.array(mask)
 
   inds = getEmptyImageDimensions(mask)
-  drop_img = applyEmptyImageDimensions(img = img, inds = inds)
+
+  drop_img = applyEmptyImageDimensions(img = ANTsR::as.array(img),
+                                       inds = inds)
   drop_mask = applyEmptyImageDimensions(img = mask, inds = inds)
 
   drop_img = as.antsImage(drop_img)
