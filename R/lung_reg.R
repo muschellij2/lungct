@@ -20,6 +20,7 @@
 #' @export
 #'
 #' @importFrom extrantsr registration check_nifti
+#' @importFrom ANTsR +.antsImage
 lung_reg = function(
   base,
   follow,

@@ -2,6 +2,7 @@
 
 export(lung_reg)
 export(reduce_scan)
+importFrom(ANTsR,"+.antsImage")
 importFrom(ANTsR,antsCopyImageInfo)
 importFrom(ANTsR,as.antsImage)
 importFrom(ANTsR,as.array)
