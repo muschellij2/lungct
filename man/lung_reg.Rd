@@ -5,8 +5,7 @@
 \title{CT Lung Registration}
 \usage{
 lung_reg(base, follow, base_mask, follow_mask, add_1025 = TRUE,
-  interpolator = "LanczosWindowedSinc", typeofTransform = "SyN",
-  verbose = TRUE, ...)
+  interpolator = "Linear", typeofTransform = "SyN", verbose = TRUE, ...)
 }
 \arguments{
 \item{base}{Baseline scan - filename or \code{antsImage}}

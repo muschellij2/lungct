@@ -27,7 +27,7 @@ lung_reg = function(
   base_mask,
   follow_mask,
   add_1025 = TRUE,
-  interpolator = "LanczosWindowedSinc",
+  interpolator = "Linear",
   typeofTransform = "SyN",
   verbose = TRUE,
   ...) {
