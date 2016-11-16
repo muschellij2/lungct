@@ -5,7 +5,8 @@
 \title{CT Lung Registration}
 \usage{
 lung_reg(base, follow, base_mask, follow_mask, add_1025 = TRUE,
-  interpolator = "LanczosWindowedSinc", typeofTransform = "SyN", ...)
+  interpolator = "LanczosWindowedSinc", typeofTransform = "SyN",
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{base}{Baseline scan - filename or \code{antsImage}}
@@ -24,6 +25,8 @@ for CT)}
 passed to \code{\link{registration}}}
 
 \item{typeofTransform}{transformation to use, passed to \code{\link{registration}}}
+
+\item{verbose}{print diagnostic messages}
 
 \item{...}{additional options to pass to \code{\link{registration}}}
 }

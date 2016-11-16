@@ -11,6 +11,7 @@
 #' @param interpolator interpolation in baseline space,
 #' passed to \code{\link{registration}}
 #' @param typeofTransform transformation to use, passed to \code{\link{registration}}
+#' @param verbose print diagnostic messages
 #' @param ... additional options to pass to \code{\link{registration}}
 #'
 #' @return List of output, same as \code{\link{registration}}, with transforms
@@ -27,8 +28,12 @@ lung_reg = function(
   add_1025 = TRUE,
   interpolator = "LanczosWindowedSinc",
   typeofTransform = "SyN",
+  verbose = TRUE,
   ...) {
 
+  if (verbose) {
+    message("Dropping image dimensions outside of mask")
+  }
   L_base = reduce_scan(img = base, mask = base_mask)
   L_fup = reduce_scan(img = follow, mask = follow_mask)
 
@@ -41,9 +46,15 @@ lung_reg = function(
   if (add_1025) {
     add_val = 1025
   }
+  if (verbose) {
+    message("Adding value 1025 if necessary")
+  }
   L_base = adder(L_base, add_val = add_val)
   L_fup = adder(L_fup, add_val = add_val)
 
+  if (verbose) {
+    message("Running Registration")
+  }
   outprefix = tempfile()
   reg = registration(
     filename = L_fup$img,
@@ -52,11 +63,15 @@ lung_reg = function(
     remove.warp = FALSE,
     interpolator = interpolator,
     typeofTransform = typeofTransform,
+    verbose = verbose,
     ...
   )
   reg$add_1025 = add_1025
   reg$added_value = add_val
 
+  if (verbose) {
+    message("Converting Baseline data to NIfTI")
+  }
   L_base = extrantsr::check_nifti(L_base)
   reg$fixed = L_base
 
