@@ -7,7 +7,7 @@
 segment_lung(img, verbose = TRUE)
 }
 \arguments{
-\item{img}{Filename or \code{\link{antsImage}}}
+\item{img}{Filename or \code{antsImage}}
 
 \item{verbose}{Print diagnostic messages}
 }

@@ -2,7 +2,7 @@
 #' @title Segment Lungs from CT scans
 #' @description Segment Lungs from a non-contrast CT scan
 #'
-#' @param img Filename or \code{\link{antsImage}}
+#' @param img Filename or \code{antsImage}
 #' @param verbose Print diagnostic messages
 #'
 #' @return List of image, lung, lung mask
