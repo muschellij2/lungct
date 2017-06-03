@@ -1,15 +1,18 @@
 Package: lungct
 Type: Package
 Title: Registration of Lung CT Scans
-Version: 0.3.1
+Version: 0.4
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com"),
     person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))
 Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Registers scans of lungs of computed tomography ('CT') scans.
 Imports:
+    methods,
     ANTsR,
+    ANTsRCore (>= 0.2),
     extrantsr,
+    oro.nifti,
     neurobase (>= 1.7.2)
 Remotes: stnava/ANTsR,
     muschellij2/extrantsr,
@@ -17,6 +20,6 @@ Remotes: stnava/ANTsR,
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/muschellij2/lungreg
-BugReports: https://github.com/muschellij2/lungreg/issues
-RoxygenNote: 5.0.1.9000
+URL: https://github.com/muschellij2/lungct
+BugReports: https://github.com/muschellij2/lungct/issues
+RoxygenNote: 6.0.1

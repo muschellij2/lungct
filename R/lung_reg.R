@@ -20,7 +20,7 @@
 #' @export
 #'
 #' @importFrom extrantsr registration check_nifti
-#' @importFrom ANTsR +.antsImage
+#'
 lung_reg = function(
   base,
   follow,
@@ -73,7 +73,7 @@ lung_reg = function(
   if (verbose) {
     message("Converting Baseline data to NIfTI")
   }
-  L_base = extrantsr::check_nifti(L_base)
+  L_base = check_nifti(L_base)
   reg$fixed = L_base
 
   return(reg)

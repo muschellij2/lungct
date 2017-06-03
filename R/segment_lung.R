@@ -1,0 +1,86 @@
+
+#' @title Segment Lungs from CT scans
+#' @description Segment Lungs from a non-contrast CT scan
+#'
+#' @param img Filename or \code{\link{antsImage}}
+#' @param verbose Print diagnostic messages
+#'
+#' @return List of image, lung, lung mask
+#' @export
+#' @importFrom extrantsr check_ants filler
+#' @importFrom neurobase zero_pad
+#' @importFrom oro.nifti voxdim
+#' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
+segment_lung = function(img, verbose = TRUE) {
+  reg_img = check_ants(img)
+  img = antsImageClone(reg_img)
+  vres = voxdim(reg_img)
+  reg_img = resampleImage(reg_img, c(1,1,1))
+
+
+  ##############################
+  # 1024 should be lower limit
+  ##############################
+  adder = 1025
+  reg_img = reg_img + adder
+  reg_img[reg_img < 0] = 0
+  reg_img[reg_img > 3071 + adder] = 3071 + adder
+
+
+
+  ss = iMath(reg_img, "PeronaMalik", 10, 5)
+  ss = smoothImage(inimg = ss, sigma = 10,
+                   max_kernel_width = 200)
+  # smoothed image is greater than some thresh
+
+  med = median(as.numeric(ss))
+  body = ss > med
+  # body = ss > (-100 + adder)
+  if (verbose) {
+    message("# Getting Humans")
+  }
+
+  # zero padding in case for any connectedness
+  zp = as.array(body)
+  kdim = c(1,1,1)
+  zp = zero_pad(zp, kdim = kdim)
+  zp = as.antsImage(zp, reference = body)
+  # getting connected component
+  cc = iMath(img = zp, operation = "GetLargestComponent")
+  rm(list = "zp"); gc(); gc()
+  cc = as.array(cc)
+  cc = zero_pad(cc, kdim = kdim, invert = TRUE)
+  cc = as.antsImage(cc, reference = body)
+
+  # cc = iMath(img = cc, operation = "FillHoles")
+  cc = filler(cc, fill_size = 60)
+  # cc = filler(cc, fill_size = 40)
+
+  cc = filler(cc, fill_size = 5, dilate = FALSE)
+
+  # Dropping non-human stuff
+  inds = getEmptyImageDimensions(cc)
+
+  if (verbose) {
+    message("# Making New image")
+  }
+
+  # Don't want to drop the indices,
+  # just blank them out
+  newimg = array(0, dim = dim(reg_img))
+  newimg[inds[[1]], inds[[2]], inds[[3]]] =
+    reg_img[inds[[1]], inds[[2]], inds[[3]]]
+  newimg = as.antsImage(newimg, reference = reg_img)
+
+  lung = newimg < (-300 + adder) & newimg > 0 & cc == 1
+  lung = iMath(img = lung, operation = "GetLargestComponent")
+  # lung = iMath(img = lung, operation = "FillHoles")
+  lung = filler(lung, fill_size = 2)
+  lung = resampleImage(lung, resampleParams = vres)
+  reg_img = reg_img - adder
+  L = list(img = img,
+           lung_mask = lung,
+           lung = maskImage(img, lung)
+  )
+  return(L)
+}

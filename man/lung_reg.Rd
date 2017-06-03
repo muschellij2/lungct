@@ -37,4 +37,3 @@ value added to the data, as well as the baseline scan
 \description{
 Wrapper of regsitration function for CT scans of the lung
 }
-

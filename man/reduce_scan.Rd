@@ -20,4 +20,3 @@ a mask. Combines
 \code{\link{getEmptyImageDimensions}} and
 \code{\link{applyEmptyImageDimensions}}.
 }
-
