@@ -10,7 +10,9 @@
 #' @importFrom extrantsr check_ants filler
 #' @importFrom neurobase zero_pad
 #' @importFrom oro.nifti voxdim
+#' @importFrom stats median
 #' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
+#' @importFrom ANTsRCore antsImageClone
 segment_lung = function(img, verbose = TRUE) {
   reg_img = check_ants(img)
   img = antsImageClone(reg_img)

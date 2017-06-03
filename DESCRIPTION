@@ -9,6 +9,7 @@ Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Registers scans of lungs of computed tomography ('CT') scans.
 Imports:
     methods,
+    stats,
     ANTsR,
     ANTsRCore (>= 0.2),
     extrantsr,
