@@ -1,4 +1,3 @@
-
 #' @title Segment Lungs from CT scans
 #' @description Segment Lungs from a non-contrast CT scan
 #'
