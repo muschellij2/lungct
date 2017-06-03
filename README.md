@@ -10,3 +10,13 @@ You can install lungct from github with:
 # install.packages("devtools")
 devtools::install_github("muschellij2/lungct")
 ```
+
+## Example
+
+This is a basic example of lung segmentation:
+
+``` r
+library(lungct)
+filename = "example.nii.gz"
+reg = segment_lung(filename)
+```
