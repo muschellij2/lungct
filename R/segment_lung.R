@@ -78,14 +78,16 @@ segment_lung = function(img, verbose = TRUE) {
   # lung = iMath(img = lung, operation = "FillHoles")
   lung = filler(lung, fill_size = 2)
   # lung = resampleImage(lung, resampleParams = vres)
-  lung = resampleImageToTarget(lung, target = reg_img,
-                               interpType = "nearestNeighbor",
-                               verbose = verbose)
-  
-  reg_img = reg_img - adder
+  lung_mask = resampleImageToTarget(
+    lung, target = img,
+    interpType = "nearestNeighbor",
+    verbose = verbose)
+  lung = maskImage(img, lung_mask)
+
+  # reg_img = reg_img - adder
   L = list(img = img,
-           lung_mask = lung,
-           lung = maskImage(img, lung)
+           lung_mask = lung_mask,
+           lung = lung
   )
   return(L)
 }
