@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung CT Scans
-Version: 0.4
+Version: 0.4.1
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com"),
     person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))

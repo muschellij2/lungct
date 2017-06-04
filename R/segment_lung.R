@@ -11,7 +11,7 @@
 #' @importFrom oro.nifti voxdim
 #' @importFrom stats median
 #' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
-#' @importFrom ANTsRCore antsImageClone
+#' @importFrom ANTsRCore antsImageClone resampleImageToTarget
 segment_lung = function(img, verbose = TRUE) {
   reg_img = check_ants(img)
   img = antsImageClone(reg_img)
@@ -77,7 +77,11 @@ segment_lung = function(img, verbose = TRUE) {
   lung = iMath(img = lung, operation = "GetLargestComponent")
   # lung = iMath(img = lung, operation = "FillHoles")
   lung = filler(lung, fill_size = 2)
-  lung = resampleImage(lung, resampleParams = vres)
+  # lung = resampleImage(lung, resampleParams = vres)
+  lung = resampleImageToTarget(lung, target = reg_img,
+                               interpType = "nearestNeighbor",
+                               verbose = verbose)
+  
   reg_img = reg_img - adder
   L = list(img = img,
            lung_mask = lung,
