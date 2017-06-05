@@ -15,6 +15,9 @@ before_install:
   - ANTsRCorerel=0.2
   - reldir=latest
   - antsrrel=0.5.4
-  - wget -O antsr_travis.sh http://bit.ly/antsr_travis
+  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
   - chmod +x antsr_travis.sh
+  - install_gh_no_dep "muschellij2/extrantsr"
   - ./antsr_travis.sh
+  - drop_remote extrantsr
+
