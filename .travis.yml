@@ -21,6 +21,7 @@ before_install:
   - . ./antsr_travis.sh
   - install_nodep_and_drop "extrantsr"
   - rm antsr_travis.sh
+  - cat DESCRIPTION
 
 
 
