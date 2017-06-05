@@ -16,7 +16,7 @@ Imports:
     extrantsr (>= 3.0.2),
     oro.nifti,
     neurobase (>= 1.7.2)
-Remotes: stnava/ANTsR,
+Remotes: stnava/ANTsRCore,
     muschellij2/extrantsr,
     muschellij2/neurobase
 License: GPL-2

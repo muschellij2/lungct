@@ -16,4 +16,5 @@ before_install:
   - reldir=latest
   - antsrrel=0.5.4
   - wget -O antsr_travis.sh http://bit.ly/antsr_travis
+  - chmod +x antsr_travis.sh
   - ./antsr_travis.sh
