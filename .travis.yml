@@ -3,3 +3,17 @@
 language: R
 sudo: false
 cache: packages
+
+before_install:
+  # for RGL
+  - Rscript -e 'x = system("hostname", intern = TRUE); print(x);'
+  - Rscript -e 'x = system("users", intern = TRUE); print(x);'
+  - Rscript -e 'x = Sys.getenv("USER"); print(x);'
+  - export RGL_USE_NULL=TRUE;
+  - itkrrel=0.0.1
+  - gh_user=stnava
+  - ANTsRCorerel=0.2
+  - reldir=latest
+  - antsrrel=0.5.4
+  - wget -O antsr_travis.sh http://bit.ly/antsr_travis
+  - ./antsr_travis.sh
