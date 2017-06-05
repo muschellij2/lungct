@@ -11,14 +11,15 @@
 #' @importFrom oro.nifti voxdim
 #' @importFrom stats median
 #' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
-#' @importFrom ANTsRCore antsImageClone resampleImageToTarget
+#' @importFrom ANTsRCore antsImageClone
 segment_lung = function(img, verbose = TRUE) {
+  
   reg_img = check_ants(img)
   img = antsImageClone(reg_img)
   vres = voxdim(reg_img)
   reg_img = resampleImage(reg_img, c(1,1,1))
-
-
+  
+  
   ##############################
   # 1024 should be lower limit
   ##############################
@@ -26,21 +27,35 @@ segment_lung = function(img, verbose = TRUE) {
   reg_img = reg_img + adder
   reg_img[reg_img < 0] = 0
   reg_img[reg_img > 3071 + adder] = 3071 + adder
-
-
-
+  
+  if (verbose) {
+    message("# Getting Humans")
+  }
   ss = iMath(reg_img, "PeronaMalik", 10, 5)
+  body = ss > (0 + adder)
+  body = iMath(img = body, operation = "GetLargestComponent")
+  inds = getEmptyImageDimensions(body)
+  rm(list = "body"); gc(); gc()
+  ss = maskEmptyImageDimensions(
+    img = ss, 
+    inds = inds, 
+    mask.value = 0)
+  
+  if (verbose) {
+    message("# smoothing image")
+  }
   ss = smoothImage(inimg = ss, sigma = 10,
                    max_kernel_width = 200)
   # smoothed image is greater than some thresh
-
+  
   med = median(as.numeric(ss))
   body = ss > med
+  
   # body = ss > (-100 + adder)
   if (verbose) {
     message("# Getting Humans")
   }
-
+  
   # zero padding in case for any connectedness
   zp = as.array(body)
   kdim = c(1,1,1)
@@ -52,38 +67,39 @@ segment_lung = function(img, verbose = TRUE) {
   cc = as.array(cc)
   cc = zero_pad(cc, kdim = kdim, invert = TRUE)
   cc = as.antsImage(cc, reference = body)
-
+  
+  if (verbose) {
+    message("# Filling Holes")
+  }
   # cc = iMath(img = cc, operation = "FillHoles")
   cc = filler(cc, fill_size = 60)
   # cc = filler(cc, fill_size = 40)
-
   cc = filler(cc, fill_size = 5, dilate = FALSE)
-
+  
   # Dropping non-human stuff
   inds = getEmptyImageDimensions(cc)
-
+  
   if (verbose) {
     message("# Making New image")
   }
-
+  
   # Don't want to drop the indices,
   # just blank them out
-  newimg = array(0, dim = dim(reg_img))
-  newimg[inds[[1]], inds[[2]], inds[[3]]] =
-    reg_img[inds[[1]], inds[[2]], inds[[3]]]
-  newimg = as.antsImage(newimg, reference = reg_img)
+  newimg = maskEmptyImageDimensions(img = reg_img, inds = inds)
 
   lung = newimg < (-300 + adder) & newimg > 0 & cc == 1
   lung = iMath(img = lung, operation = "GetLargestComponent")
   # lung = iMath(img = lung, operation = "FillHoles")
   lung = filler(lung, fill_size = 2)
-  # lung = resampleImage(lung, resampleParams = vres)
-  lung_mask = resampleImageToTarget(
-    lung, target = img,
-    interpType = "nearestNeighbor",
-    verbose = verbose)
+  # lung_mask = resampleImage(lung, 
+  #                           resampleParams = dim(img), useVoxels = TRUE,
+  #                           interpType = 1)
+  # lung_mask = resampleImageToTarget(
+  #   lung, target = img,
+  #   interpType = "nearestNeighbor",
+  #   verbose = verbose)
   lung = maskImage(img, lung_mask)
-
+  
   # reg_img = reg_img - adder
   L = list(img = img,
            lung_mask = lung_mask,

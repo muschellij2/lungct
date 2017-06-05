@@ -13,7 +13,7 @@ Imports:
     stats,
     ANTsR,
     ANTsRCore (>= 0.2),
-    extrantsr,
+    extrantsr (>= 3.0.2),
     oro.nifti,
     neurobase (>= 1.7.2)
 Remotes: stnava/ANTsR,
