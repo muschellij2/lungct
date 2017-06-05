@@ -2,6 +2,8 @@
 
 The goal of lungct is to process Lung CT Scans.
 
+[![Travis-CI Build Status](https://travis-ci.org/muschellij2/lungct.svg?branch=master)](https://travis-ci.org/muschellij2/lungct)
+
 ## Installation
 
 You can install lungct from github with:
