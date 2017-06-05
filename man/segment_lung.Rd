@@ -4,10 +4,14 @@
 \alias{segment_lung}
 \title{Segment Lungs from CT scans}
 \usage{
-segment_lung(img, verbose = TRUE)
+segment_lung(img, mask = TRUE, lthresh = -300, verbose = TRUE)
 }
 \arguments{
 \item{img}{Filename or \code{antsImage}}
+
+\item{mask}{Should the image be masked}
+
+\item{lthresh}{lower threshold for the image}
 
 \item{verbose}{Print diagnostic messages}
 }

@@ -11,7 +11,7 @@ Description: Processes and registers scans of lungs of computed
 Imports:
     methods,
     stats,
-    ANTsR,
+    ptinpoly,
     ANTsRCore (>= 0.2),
     extrantsr (>= 3.0.2),
     oro.nifti,

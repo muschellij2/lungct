@@ -40,7 +40,7 @@ lung_reg = function(
 
   adder = function(L, add_val) {
     L$img = L$img + add_val
-    L$img = maskImage(L$img, L$mask)
+    L$img = mask_img(L$img, L$mask)
     return(L)
   }
   add_val = 0

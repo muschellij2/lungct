@@ -12,7 +12,7 @@
 #'
 #' @import methods
 #' @importFrom extrantsr check_ants
-#' @importFrom ANTsR maskImage
+#' @importFrom neurobase mask_img
 #' @importFrom neurobase getEmptyImageDimensions applyEmptyImageDimensions
 reduce_scan = function(img, mask) {
   img = check_ants(img)
@@ -32,7 +32,7 @@ reduce_scan = function(img, mask) {
   # drop_mask = as.antsImage(drop_mask)
   # drop_mask = antsCopyImageInfo(img, drop_mask)
 
-  drop_img = maskImage(drop_img, drop_mask)
+  drop_img = mask_img(drop_img, drop_mask)
   L = list(img = drop_img,
            mask = drop_mask)
   return(L)
