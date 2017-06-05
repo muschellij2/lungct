@@ -91,9 +91,9 @@ segment_lung = function(img, verbose = TRUE) {
   lung = iMath(img = lung, operation = "GetLargestComponent")
   # lung = iMath(img = lung, operation = "FillHoles")
   lung = filler(lung, fill_size = 2)
-  # lung_mask = resampleImage(lung,
-  #                           resampleParams = dim(img), useVoxels = TRUE,
-  #                           interpType = 1)
+  lung_mask = resampleImage(lung,
+                            resampleParams = dim(img), useVoxels = TRUE,
+                            interpType = 1)
   # lung_mask = resampleImageToTarget(
   #   lung, target = img,
   #   interpType = "nearestNeighbor",
