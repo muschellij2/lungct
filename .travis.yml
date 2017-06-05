@@ -10,11 +10,11 @@ before_install:
   - Rscript -e 'x = system("users", intern = TRUE); print(x);'
   - Rscript -e 'x = Sys.getenv("USER"); print(x);'
   - export RGL_USE_NULL=TRUE;
-  - itkrrel=0.0.1
-  - gh_user=stnava
-  - ANTsRCorerel=0.2
-  - reldir=latest
-  - antsrrel=0.5.4
+  - export itkrrel=0.0.1
+  - export gh_user=stnava
+  - export ANTsRCorerel=0.2
+  - export reldir=latest
+  - export antsrrel=0.5.4
   - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
   - cat antsr_travis.sh
   - chmod +x antsr_travis.sh
