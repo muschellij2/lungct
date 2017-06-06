@@ -51,18 +51,27 @@ segment_lung = function(img,
   reg_img = as.antsImage(reg_img, reference = img)
 
   if (verbose) {
-    message("# Getting Humans")
+    message("# Getting Humans: Smoothing Image")
   }
   ss = iMath(reg_img, "PeronaMalik", 10, 5)
+
+  if (verbose) {
+    message("# Getting Humans: Largest Component")
+  }
   body = ss > (0 + adder)
   body = iMath(img = body, operation = "GetLargestComponent")
   inds = getEmptyImageDimensions(body)
+  if (verbose) {
+    message("# Getting Humans: Dropping Zero Dimensions")
+  }
   ss = maskEmptyImageDimensions(
     img = ss,
     inds = inds,
     mask.value = 0)
 
-
+  if (verbose) {
+    message("# Getting Humans: Making Coarse Body")
+  }
   body = ss > (lthresh + adder)
   body = iMath(img = body, operation = "GetLargestComponent")
   ebody = coarse_body(body)
@@ -123,13 +132,25 @@ segment_lung = function(img,
   # # Don't want to drop the indices,
   # # just blank them out
   # newimg = maskEmptyImageDimensions(img = reg_img, inds = inds)
+  if (verbose) {
+    message("# Getting Lungs: Thresholding")
+  }
   newimg = ss
   cc = ebody
 
   lung = newimg < (lthresh + adder) & newimg > 0 & cc == 1
+  if (verbose) {
+    message("# Getting Lungs: Largest Component")
+  }
   lung = iMath(img = lung, operation = "GetLargestComponent")
   # lung = iMath(img = lung, operation = "FillHoles")
+  if (verbose) {
+    message("# Getting Lungs: Filling Holes")
+  }
   lung = filler(lung, fill_size = 2)
+  if (verbose) {
+    message("# Resampling Back to Original Image Size")
+  }
   lung_mask = resampleImage(lung,
                             resampleParams = dim(img), useVoxels = TRUE,
                             interpType = 1)
