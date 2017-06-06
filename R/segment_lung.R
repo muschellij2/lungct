@@ -21,19 +21,34 @@ segment_lung = function(img,
 
                         ) {
 
+  if (verbose) {
+    message("Checking Inputs")
+  }
   reg_img = check_ants(img)
   img = antsImageClone(reg_img)
   vres = voxdim(reg_img)
+  if (verbose) {
+    message("Resampling Image")
+  }
   reg_img = resampleImage(reg_img, c(1,1,1))
 
 
   ##############################
   # 1024 should be lower limit
   ##############################
+  if (verbose) {
+    message("Making Positive Values")
+  }
   adder = 1025
+  reg_img = as.array(reg_img)
+
   reg_img = reg_img + adder
+  if (verbose) {
+    message("Setting voxel ranges")
+  }
   reg_img[reg_img < 0] = 0
   reg_img[reg_img > 3071 + adder] = 3071 + adder
+  reg_img = as.antsImage(reg_img, reference = img)
 
   if (verbose) {
     message("# Getting Humans")
