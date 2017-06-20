@@ -1,27 +1,16 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
 language: R
 sudo: false
 cache: packages
-
 before_install:
-  # for RGL
-  - Rscript -e 'x = system("hostname", intern = TRUE); print(x);'
-  - Rscript -e 'x = system("users", intern = TRUE); print(x);'
-  - Rscript -e 'x = Sys.getenv("USER"); print(x);'
-  - export RGL_USE_NULL=TRUE;
-  - export itkrrel=0.0.1
-  - export gh_user=stnava
-  - export ANTsRCorerel=0.2
-  - export reldir=latest
-  - export antsrrel=0.5.4
   - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
   - cat antsr_travis.sh
-  - chmod +x antsr_travis.sh
-  - . ./antsr_travis.sh
-  - install_nodep_and_drop "extrantsr"
+  - source ./antsr_travis.sh
   - rm antsr_travis.sh
   - cat DESCRIPTION
-
-
-
+deploy:
+  provider: releases
+  api_key:
+    secure: kBS0QGFSwPde8OyWQxus6EZm4OfvHLqm3oEIL/3s7ZptN0UaAl4OhOQ/+oPPwbG6TRApow/hm/z1uydLMGc0Eo0Pzx1cQgDHEiBpPyeiqXNqW+N2KWiVv//R+qpy6q78lC0TXWwItNxYVaFWAXivbmQb+92bLh5idNJCML7ES2mSWy7/WeRkTLpfyGB5G7QQ5kTp/Rn+LHEAWr5aeYc2kFFzLi1RFZ0t4sVwaU6zOd472zEE7e/4OD4XAJgee34SJEw6p1Ml4i0DW8mp9BlCDSQHxvGxYbx/1jUZPJpAnq36aqBE/8RVXSzITKwXMuKcNBSOk3xn68NcFV/2xbMk9LluVVzq+jC155lA41Z0Ra0U/vd+uDheNvVHfxU8ME0q8EWeSaixdBK0edI39ILw8sXJN6HfOy+6197VYLVFIalOD3Sl5k+GrvPGYeGSCvBlOWOo21/Cpu/RUlB6WNtD0zeqxDnEH4+Xsp/FzyTD1HPRkoSrsA0Xq4C4rr8TzSmaD2Y4AltdO/WPoP6IC/84mmzVocqAVGUW5CuFyyAoYML2rM+4Ww4f5hSK4QpV9aexraPEzEx93YISgvgP2UYPSKYPSNFWN5ELf1hSqH+etbvod0v2C9YX3jVgTBaptEiDZhgvSD+aWqiHkrbjl+gOjyLiMP52/ureR1LgG3nk4iU=
+  file: lungct.tar.gz
+  on:
+    repo: muschellij2/lungct
