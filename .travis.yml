@@ -7,6 +7,7 @@ before_install:
   - source ./antsr_travis.sh
   - rm antsr_travis.sh
   - cat DESCRIPTION
+
 deploy:
   provider: releases
   api_key:
