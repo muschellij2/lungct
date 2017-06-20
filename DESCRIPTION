@@ -15,7 +15,7 @@ Imports:
     ANTsRCore (>= 0.2),
     extrantsr (>= 3.0.2),
     oro.nifti,
-    neurobase (>= 1.7.2)
+    neurobase (>= 1.20.5)
 Remotes: stnava/ANTsRCore,
     muschellij2/extrantsr,
     muschellij2/neurobase
