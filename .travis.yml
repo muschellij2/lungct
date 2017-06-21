@@ -1,6 +1,11 @@
 language: R
 sudo: false
 cache: packages
+
+os:
+  - linux
+  - osx
+  
 before_install:
   - export RGL_USE_NULL=TRUE
   - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
