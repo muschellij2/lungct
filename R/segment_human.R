@@ -21,7 +21,7 @@ segment_human = function(
   if (verbose) {
     message("Making Positive Values")
   }
-  reg_img = as.array(reg_img)
+  # reg_img = as.array(reg_img)
 
   reg_img = reg_img + adder
   if (verbose) {
@@ -29,7 +29,7 @@ segment_human = function(
   }
   reg_img[reg_img < 0] = 0
   reg_img[reg_img > 3071 + adder] = 3071 + adder
-  reg_img = as.antsImage(reg_img, reference = img)
+  # reg_img = as.antsImage(reg_img, reference = img)
 
   if (verbose) {
     message("# Getting Humans: Smoothing Image")
