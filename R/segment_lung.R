@@ -32,55 +32,21 @@ segment_lung = function(img,
   }
   reg_img = resampleImage(reg_img, c(1,1,1))
 
-
-  ##############################
-  # 1024 should be lower limit
-  ##############################
-  if (verbose) {
-    message("Making Positive Values")
-  }
   adder = 1025
-  reg_img = as.array(reg_img)
+  res = segment_human(
+    img = reg_img,
+    adder = adder,
+    lthresh = -300,
+    verbose = TRUE
+  )
 
-  reg_img = reg_img + adder
-  if (verbose) {
-    message("Setting voxel ranges")
-  }
-  reg_img[reg_img < 0] = 0
-  reg_img[reg_img > 3071 + adder] = 3071 + adder
-  reg_img = as.antsImage(reg_img, reference = img)
-
-  if (verbose) {
-    message("# Getting Humans: Smoothing Image")
-  }
-  ss = iMath(reg_img, "PeronaMalik", 10, 5)
-
-  if (verbose) {
-    message("# Getting Humans: Largest Component")
-  }
-  body = ss > (0 + adder)
-  body = iMath(img = body, operation = "GetLargestComponent")
-  inds = getEmptyImageDimensions(body)
-  if (verbose) {
-    message("# Getting Humans: Dropping Zero Dimensions")
-  }
-  ss = maskEmptyImageDimensions(
-    img = ss,
-    inds = inds,
-    mask.value = 0)
-
-  if (verbose) {
-    message("# Getting Humans: Making Coarse Body")
-  }
-  body = ss > (lthresh + adder)
-  body = iMath(img = body, operation = "GetLargestComponent")
-  ebody = coarse_body(body)
+  ss = res$smooth_masked
+  ebody = res$body
   # inds = getEmptyImageDimensions(body)
   # ss = maskEmptyImageDimensions(
   #   img = ss,
   #   inds = inds,
   #   mask.value = 0)
-  ss = mask_img(ss, ebody)
 
   # if (verbose) {
   #   message("# smoothing image")
