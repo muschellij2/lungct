@@ -6,7 +6,7 @@
 #' @param lthresh lower threshold for the image
 #' @param verbose Print diagnostic messages
 #'
-#' @return List of smoothed image, masked smoothed image, body
+#' @return List of smoothed image, body, adder
 #' @export
 segment_human = function(
   img,
@@ -55,12 +55,10 @@ segment_human = function(
   }
   body = ss > (lthresh + adder)
   body = iMath(img = body, operation = "GetLargestComponent")
-  ebody = coarse_body(body)
 
   L = list(
-    smooth_masked = mask_img(ss, ebody),
     smoothed = ss,
-    body = ebody,
+    body = body,
     adder = adder)
   return(L)
 }

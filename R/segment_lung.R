@@ -39,9 +39,10 @@ segment_lung = function(img,
     lthresh = -300,
     verbose = TRUE
   )
+  ebody = coarse_body(res$body)
+  ss = res$smoothed
+  ss = mask_img(ss, ebody)
 
-  ss = res$smooth_masked
-  ebody = res$body
   # inds = getEmptyImageDimensions(body)
   # ss = maskEmptyImageDimensions(
   #   img = ss,

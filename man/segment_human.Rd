@@ -16,7 +16,7 @@ segment_human(img, adder = 1025, lthresh = -300, verbose = TRUE)
 \item{verbose}{Print diagnostic messages}
 }
 \value{
-List of smoothed image, masked smoothed image, body
+List of smoothed image, body, adder
 }
 \description{
 Segment Human from a non-contrast CT scan
