@@ -22,13 +22,13 @@ segment_lung = function(img,
                         ) {
 
   if (verbose) {
-    message("Checking Inputs")
+    message("# Checking Inputs")
   }
   reg_img = check_ants(img)
   img = antsImageClone(reg_img)
   vres = voxdim(reg_img)
   if (verbose) {
-    message("Resampling Image")
+    message("# Resampling Image to 1x1x1")
   }
   reg_img = resampleImage(reg_img, c(1,1,1))
 
@@ -119,7 +119,8 @@ segment_lung = function(img,
     message("# Resampling Back to Original Image Size")
   }
   lung_mask = resampleImage(lung,
-                            resampleParams = dim(img), useVoxels = TRUE,
+                            resampleParams = dim(img),
+                            useVoxels = TRUE,
                             interpType = 1)
   # lung_mask = resampleImageToTarget(
   #   lung, target = img,

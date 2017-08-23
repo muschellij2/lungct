@@ -19,13 +19,13 @@ segment_human = function(
   # 1024 should be lower limit
   ##############################
   if (verbose) {
-    message("Making Positive Values")
+    message("# Adding to Values, usually to make them positive")
   }
   # reg_img = as.array(reg_img)
 
   reg_img = reg_img + adder
   if (verbose) {
-    message("Setting voxel ranges")
+    message("# Setting voxel ranges, 0 to (3071 + adder)")
   }
   reg_img[reg_img < 0] = 0
   reg_img[reg_img > 3071 + adder] = 3071 + adder

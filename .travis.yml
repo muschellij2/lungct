@@ -1,29 +1,77 @@
-language: R
+# Neuroconductor Template no ANTs
+language: r
 sudo: false
 cache: packages
+warnings_are_errors: true
+use_bioc: true
+bioc_required: true
+cran: http://cran.rstudio.com
+dist: precise
 
 os:
   - linux
   - osx
-  
-before_install:
-  - export RGL_USE_NULL=TRUE
-  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
-  - cat antsr_travis.sh
-  - source ./antsr_travis.sh
-  - rm antsr_travis.sh
-  - cat DESCRIPTION
 
-after_success: 
-  - install_build_with_tag
+r_check_args: --as-cran
+# r_check_args: "--as-cran --install-args=--build"
+
+before_install:
+  - export PROJ_DIR=`basename $PWD`    
+  - fname=travis_helpers.sh
+  - wget -O ${fname} http://bit.ly/travis_helpers
+  - cat ${fname}; source ${fname}; rm ${fname}  
+  - cat DESCRIPTION
+  - remove_neuroc_packages 
+  - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+  # does all the clang exports
+  - x=`export_clang_cxx`; eval ${x}
+  - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
+  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"  
+  - clang_cxx  
+  - export cmake_version="3.4"
+  - cmake --version
+  - x=`cmake_setup`; echo "${x}"; eval ${x};
+  - cmake --version
+  - export ants_user=stnava
+  - install_missing_remote_deps ${ants_user}/ITKR ${ants_user}/ANTsRCore ${ants_user}/ANTsR
+  - echo "Done Installing Missing Deps"
+  - gh_binary_install ${ants_user}/ITKR
+  - gh_binary_install ${ants_user}/ANTsRCore
+  - gh_binary_install ${ants_user}/ANTsR  
+  - cat DESCRIPTION
+  - install_remotes_no_dep
+  - cat DESCRIPTION
+  - export PACKAGE_NAME=`package_name`
+
+after_success:
+  - cat ${PACKAGE_NAME}.Rcheck/00install.out
+  - cat ${PACKAGE_NAME}.Rcheck/00check.log
+
+after_failure:
+  - cat ${PACKAGE_NAME}.Rcheck/00install.out
+  - cat ${PACKAGE_NAME}.Rcheck/00check.log
+
+# need this explicitly
+# for naming convention
+before_deploy:
+  - R CMD INSTALL --build ${PKG_TARBALL}
+  # so no overwrite of linux build
+  - if [ "$TRAVIS_OS_NAME" == "osx" ];
+    then
+    rm -f *.tar.gz
+    fi
 
 deploy:
   provider: releases
-  skip_cleanup: yes
+  skip_cleanup: true
   api_key:
     secure: kBS0QGFSwPde8OyWQxus6EZm4OfvHLqm3oEIL/3s7ZptN0UaAl4OhOQ/+oPPwbG6TRApow/hm/z1uydLMGc0Eo0Pzx1cQgDHEiBpPyeiqXNqW+N2KWiVv//R+qpy6q78lC0TXWwItNxYVaFWAXivbmQb+92bLh5idNJCML7ES2mSWy7/WeRkTLpfyGB5G7QQ5kTp/Rn+LHEAWr5aeYc2kFFzLi1RFZ0t4sVwaU6zOd472zEE7e/4OD4XAJgee34SJEw6p1Ml4i0DW8mp9BlCDSQHxvGxYbx/1jUZPJpAnq36aqBE/8RVXSzITKwXMuKcNBSOk3xn68NcFV/2xbMk9LluVVzq+jC155lA41Z0Ra0U/vd+uDheNvVHfxU8ME0q8EWeSaixdBK0edI39ILw8sXJN6HfOy+6197VYLVFIalOD3Sl5k+GrvPGYeGSCvBlOWOo21/Cpu/RUlB6WNtD0zeqxDnEH4+Xsp/FzyTD1HPRkoSrsA0Xq4C4rr8TzSmaD2Y4AltdO/WPoP6IC/84mmzVocqAVGUW5CuFyyAoYML2rM+4Ww4f5hSK4QpV9aexraPEzEx93YISgvgP2UYPSKYPSNFWN5ELf1hSqH+etbvod0v2C9YX3jVgTBaptEiDZhgvSD+aWqiHkrbjl+gOjyLiMP52/ureR1LgG3nk4iU=
-  file_glob: yes
-  file: lungct*.t*gz
-  'on':
-    tags: yes
-    repo: muschellij2/lungct
+  file_glob: true
+  file: ${PACKAGE_NAME}*.t*gz
+  on:
+    tags: true
+    repo: muschellij2/${PROJ_DIR}
+
+after_deploy:
+  - Rscript -e 'covr::coveralls(type = "all")'
+
