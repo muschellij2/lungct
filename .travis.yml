@@ -16,6 +16,7 @@ r_check_args: --as-cran
 # r_check_args: "--as-cran --install-args=--build"
 
 before_install:
+  - export RGL_USE_NULL=TRUE
   - export PROJ_DIR=`basename $PWD`    
   - fname=travis_helpers.sh
   - wget -O ${fname} http://bit.ly/travis_helpers
