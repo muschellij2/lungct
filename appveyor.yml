@@ -1,0 +1,100 @@
+# Neuroconductor Template
+# DO NOT CHANGE the "init" and "install" sections below
+
+# Download script file from GitHub
+init:
+  ps: |
+        $ErrorActionPreference = "Stop"
+        Invoke-WebRequest http://raw.github.com/krlmlr/r-appveyor/master/scripts/appveyor-tool.ps1 -OutFile "..\appveyor-tool.ps1"
+        Import-Module '..\appveyor-tool.ps1'
+
+environment:
+  global:
+    USE_RTOOLS: true
+    R_CHECK_INSTALL_ARGS: "--install-args=--build --no-multiarch "
+    WARNINGS_ARE_ERRORS: 1
+
+install:
+  - ps: Bootstrap
+
+cache:
+  - C:\RLibrary
+
+# Adapt as necessary starting from here
+build_script:
+  # need to move to higher dir because CMake path req
+  - mkdir C:\run
+  - cp -avr * C:\run
+  # need the tool a level above
+  - cp ../travis-tool.sh C:\
+  - cd C:\run
+  # - ps: Invoke-WebRequest http://ci.appveyor.com/api/buildjobs/tu3s6m73682lhvc1/artifacts/ITKR_0.4.12.3.zip -OutFile ".\ITKR.zip"
+  - ps: Invoke-WebRequest https://github.com/muschellij2/ITKR/releases/download/v0.4.12.2/ITKR_0.4.12.2.zip -OutFile ".\ITKR.zip"
+  - ls
+  - Rscript -e "install.packages('ITKR.zip', repos = NULL)"  
+  - rm ITKR.zip
+  # - ps: Invoke-WebRequest https://github.com/muschellij2/ANTsRCore/releases/download/v0.4.12.2/ITKR_0.4.12.2.zip -OutFile ".\ITKR.zip"
+  # - ls
+  # - Rscript -e "install.packages('ANTsRCore.zip', repos = NULL)"  
+  # - rm ANTsRCore.zip  
+  # - ps: Invoke-WebRequest https://github.com/muschellij2/ANTsRCore/releases/download/v0.4.12.2/ITKR_0.4.12.2.zip -OutFile ".\ITKR.zip"
+  # - ls
+  # - Rscript -e "install.packages('ANTsR.zip', repos = NULL)"  
+  # - rm ANTsR.zip  
+  # setting PATH to be specific - no MinGW overall - just R's
+  - set PATH=C:\Rtools\bin;C:\Rtools\MinGW\bin;
+  - set PATH=%PATH%;C:\Rtools\mingw_64\bin;
+  - set PATH=%PATH%;C:\Program Files\Git\cmd;
+  - set PATH=%PATH%;"C:\Program Files (x86)\CMake\bin";
+  - set PATH=%PATH%;C:\R\bin\i386;  
+  - set PATH=%PATH%;C:\Program Files\Git\usr\bin  
+  - set PATH=%PATH%;C:\Users\appveyor\AppData\Roaming\npm
+  - set PATH=%PATH%;C:\Users\appveyor\AppData\Local\Yarn\bin
+  - set PATH=%PATH%;C:\Program Files\AppVeyor\BuildAgent\
+  - set PATH=%PATH%;C:\Windows\system32
+  - set PATH=%PATH%;C:\Windows
+  - set PATH=%PATH%;C:\Windows\System32\Wbem
+  - set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0\
+  - set PATH=%PATH%;C:\Program Files\7-Zip
+  - travis-tool.sh install_deps
+
+test_script:
+  - travis-tool.sh run_tests
+  - ls
+  - cp -r C:/run/* %APPVEYOR_BUILD_FOLDER%
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - ls
+
+
+on_failure:
+  - 7z a failure.zip *.Rcheck\*
+  - appveyor PushArtifact failure.zip
+
+artifacts:
+  - path: '*.Rcheck\**\*.log'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.zip'
+    name: Bits    
+
+  - path: '*.Rcheck\**\*.out'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.fail'
+    name: Logs
+
+  - path: '*.Rcheck\**\*.Rout'
+    name: Logs
+
+  - path: '\*_*.zip'
+    name: Bits
+
+deploy:
+  provider: GitHub
+  description: 'Windows Binary'
+  auth_token:
+    secure: dUI5DBS31Kfp6DIqx8NSxsyTkOOXbF5QkW6vi+++/smzii3mGky/YYRTA9KJX+1Z
+  draft: false
+  prerelease: false
+  on:
+    appveyor_repo_tag: true

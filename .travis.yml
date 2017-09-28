@@ -12,7 +12,12 @@ os:
   - linux
   - osx
 
-r_check_args: --as-cran
+env:
+  global:
+  - R_BUILD_ARGS="--no-build-vignettes --no-manual"
+  - R_CHECK_ARGS="--as-cran --install-args=--build"
+  - RGL_USE_NULL=TRUE
+
 # r_check_args: "--as-cran --install-args=--build"
 
 before_install:
@@ -23,6 +28,7 @@ before_install:
   - cat ${fname}; source ${fname}; rm ${fname}  
   - Rscript -e 'source("https://install-github.me/mangothecat/callr")'  
   - cat DESCRIPTION
+  - export PACKAGE_NAME=`package_name`  
   - remove_neuroc_packages 
   - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
   # does all the clang exports
@@ -34,16 +40,25 @@ before_install:
   - cmake --version
   - x=`cmake_setup`; echo "${x}"; eval ${x};
   - cmake --version
-  - export ants_user=muschellij2
-  - install_missing_remote_deps ${ants_user}/ITKR ${ants_user}/ANTsRCore ${ants_user}/ANTsR
-  - echo "Done Installing Missing Deps"
-  - gh_binary_install ${ants_user}/ITKR
-  - gh_binary_install ${ants_user}/ANTsRCore
-  - gh_binary_install ${ants_user}/ANTsR  
+  - echo "Installing Missing Deps ITKR"
+  - install_missing_remote_deps ${ants_user}/ITKR
+  - gh_binary_install ${ants_user}/ITKR ;
+  - if [[ "${PACKAGE_NAME}" != "ITKR" ]]; 
+    then
+      echo "Installing Missing Deps ANTsRCore" ;
+      install_missing_remote_deps ${ants_user}/ANTsRCore;
+      gh_binary_install ${ants_user}/ANTsRCore ;
+    fi
+  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; 
+    then
+      echo "Installing Missing Deps ANTsR" ;
+      install_missing_remote_deps ${ants_user}/ANTsR ;
+      gh_binary_install ${ants_user}/ANTsR ;
+    fi    
   - cat DESCRIPTION
   - install_remotes_no_dep
   - cat DESCRIPTION
-  - export PACKAGE_NAME=`package_name`
+  - echo $PATH ;  
 
 after_success:
   - cat ${PACKAGE_NAME}.Rcheck/00install.out
