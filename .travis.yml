@@ -40,6 +40,7 @@ before_install:
   - cmake --version
   - x=`cmake_setup`; echo "${x}"; eval ${x};
   - cmake --version
+  - export ants_user=muschellij2  
   - echo "Installing Missing Deps ITKR"
   - install_missing_remote_deps ${ants_user}/ITKR
   - gh_binary_install ${ants_user}/ITKR ;
