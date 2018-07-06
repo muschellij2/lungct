@@ -2,9 +2,12 @@
 % Please edit documentation in R/segment_lung.R
 \name{segment_lung}
 \alias{segment_lung}
+\alias{quick_lung_mask}
 \title{Segment Lungs from CT scans}
 \usage{
 segment_lung(img, mask = TRUE, lthresh = -300, verbose = TRUE)
+
+quick_lung_mask(img, lthresh = -300)
 }
 \arguments{
 \item{img}{Filename or \code{antsImage}}
