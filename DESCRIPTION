@@ -1,11 +1,11 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung CT Scans
-Version: 0.6.0.1
+Version: 0.6.0.9000
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com"),
-    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))
-Maintainer: John Muschelli <muschellij2@gmail.com>
+    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
+    person("Sarah", "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
 Description: Processes and registers scans of lungs of computed 
     tomography ('CT') scans.
 Imports:
