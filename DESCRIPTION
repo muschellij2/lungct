@@ -4,8 +4,8 @@ Title: Processing of Lung CT Scans
 Version: 0.7.0.9000
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com"),
-    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"))
-Maintainer: John Muschelli <muschellij2@gmail.com>
+    person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
+    person("Sarah", "Ryan", email = "SARAH.M.RYAN@ucdenver.edu", role="aut"))
 Description: Processes and registers scans of lungs of computed 
     tomography ('CT') scans.
 Imports:
@@ -13,11 +13,13 @@ Imports:
     stats,
     ptinpoly,
     ANTsRCore (>= 0.3.4),
+    ANTsR,
     extrantsr (>= 3.1),
-    ANTsR (>= 0.7.0),
     oro.nifti,
     neurobase (>= 1.20.5)
-Remotes: stnava/ANTsRCore,
+Remotes: 
+    ANTsX/ANTsR,
+    ANTsX/ANTsRCore,
     muschellij2/extrantsr,
     muschellij2/neurobase
 License: GPL-2
