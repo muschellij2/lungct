@@ -22,6 +22,7 @@ segment_airway = function(img, lung_air_mask, verbose = TRUE) {
   air_thres = quantile(air,.05)
   air_mask[img > air_thres] = 0
   air_mask = iMath(air_mask, "MO", 1)
+  air_mask = iMath(air_mask, "MD", 1)
 
   if (verbose) {
     message("# Segmenting Airways: Connected Components")
@@ -30,7 +31,9 @@ segment_airway = function(img, lung_air_mask, verbose = TRUE) {
   n_clus = length(unique(air_mask))
   if(n_clus == 1){
     air_mask = antsImageClone(lung_air_mask)
-    air_mask[img > 125] = 0
+    air_mask[img > air_thres*.5] = 0
+    air_mask = iMath(air_mask, "MO", 1)
+    air_mask = iMath(air_mask, "MD", 1)
     air_mask = labelClusters(air_mask, minClusterSize = 10000)
     n_clus = length(unique(air_mask))
   }
@@ -50,6 +53,6 @@ segment_airway = function(img, lung_air_mask, verbose = TRUE) {
   if (verbose) {
     message("# Segmenting Airways: Smoothing")
   }
-  air_mask = iMath(air_mask, "MD", 2)
+  air_mask = iMath(air_mask, "MD", 1)
   return(air_mask)
 }
