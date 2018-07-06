@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung CT Scans
-Version: 0.6.0.9000
+Version: 0.6.1.9000
 Authors@R: c(person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com"),
     person("Brian", "Vestal", email = "BRIAN.VESTAL@ucdenver.edu", role="aut"),
@@ -13,6 +13,7 @@ Imports:
     stats,
     ptinpoly,
     ANTsRCore (>= 0.3.4),
+    ANTsR,
     extrantsr (>= 3.1),
     oro.nifti,
     neurobase (>= 1.20.5)
