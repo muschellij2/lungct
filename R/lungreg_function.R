@@ -4,7 +4,7 @@ reg_helper = function(moving_mask,
                       verbose = FALSE,
                       outprefix = NULL,
                       add_prefix = "_left_",
-                      interpolator = "Linear") {
+                      interpolator = "linear") {
 
   if (is.null(outprefix)) {
     outprefix = tempfile()
@@ -22,11 +22,6 @@ reg_helper = function(moving_mask,
       typeofTransform = "SyN",
       verbose = verbose,
       outprefix = paste0(outprefix, add_prefix))
-    transformed_mask = antsApplyTransforms(
-      fixed = fixed_mask,
-      moving = moving_mask,
-      transformlist = reg$fwdtransforms,
-      interpolator = "nearestNeighbor")
     if (!is.null(moving)) {
       moving = check_ants(moving)
       image = moving * moving_mask
@@ -35,12 +30,14 @@ reg_helper = function(moving_mask,
         moving = image,
         transformlist = reg$fwdtransforms,
         interpolator = interpolator)
+    } else {
+      transformed = NULL
+      image = NULL
     }
   } else {
     return(NULL)
   }
   L = list(reg_out = reg)
-  L$transformed_mask = transformed_mask
   L$transformed = transformed
   L$masked_image = image
   L$moving_mask = moving_mask
@@ -71,7 +68,7 @@ register_lung_mask = function(moving_mask,
                               moving = NULL,
                               outprefix = NULL,
                               verbose = FALSE,
-                              interpolator = "Linear"
+                              interpolator = "linear"
 ) {
   # verbose = FALSE;
   moving_mask = check_ants(moving_mask)
