@@ -5,7 +5,7 @@
 \title{Lung Registration for Left and Right Lungs}
 \usage{
 register_lung_mask(moving_mask, fixed_mask, moving = NULL, outprefix = NULL,
-  verbose = FALSE, interpolator = "Linear")
+  verbose = FALSE, interpolator = "linear")
 }
 \arguments{
 \item{moving_mask}{Mask of moving image, left has values

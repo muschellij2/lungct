@@ -6,7 +6,6 @@ warnings_are_errors: true
 use_bioc: true
 bioc_required: true
 cran: http://cran.rstudio.com
-dist: precise
 
 os:
   - linux
@@ -22,44 +21,44 @@ env:
 
 before_install:
   - export RGL_USE_NULL=TRUE
-  - export PROJ_DIR=`basename $PWD`    
+  - export PROJ_DIR=`basename $PWD`
   - fname=travis_helpers.sh
   - wget -O ${fname} http://bit.ly/travis_helpers
-  - cat ${fname}; source ${fname}; rm ${fname}  
-  - Rscript -e 'source("https://install-github.me/mangothecat/callr")'  
+  - cat ${fname}; source ${fname}; rm ${fname}
+  - Rscript -e 'source("https://install-github.me/mangothecat/callr")'
   - cat DESCRIPTION
-  - export PACKAGE_NAME=`package_name`  
-  - remove_neuroc_packages 
+  - export PACKAGE_NAME=`package_name`
+  - remove_neuroc_packages
   - export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
   # does all the clang exports
   - x=`export_clang_cxx`; eval ${x}
   - echo "CC=${CC}, CXX=${CXX}, CXX1X=${CXX1X}"
-  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"  
-  - clang_cxx  
+  - echo "CXX1XSTD=${CXX1XSTD}, CXX11=${CXX11}"
+  - clang_cxx
   - export cmake_version="3.4"
   - cmake --version
   - x=`cmake_setup`; echo "${x}"; eval ${x};
   - cmake --version
-  - export ants_user=muschellij2  
+  - export ants_user=muschellij2
   - echo "Installing Missing Deps ITKR"
   - install_missing_remote_deps ${ants_user}/ITKR
   - gh_binary_install ${ants_user}/ITKR ;
-  - if [[ "${PACKAGE_NAME}" != "ITKR" ]]; 
+  - if [[ "${PACKAGE_NAME}" != "ITKR" ]];
     then
       echo "Installing Missing Deps ANTsRCore" ;
       install_missing_remote_deps ${ants_user}/ANTsRCore;
       gh_binary_install ${ants_user}/ANTsRCore ;
     fi
-  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]]; 
+  - if [[ "${PACKAGE_NAME}" != "ANTsRCore" && "${PACKAGE_NAME}" != "ITKR" ]];
     then
       echo "Installing Missing Deps ANTsR" ;
       install_missing_remote_deps ${ants_user}/ANTsR ;
       gh_binary_install ${ants_user}/ANTsR ;
-    fi    
+    fi
   - cat DESCRIPTION
   - install_remotes_no_dep
   - cat DESCRIPTION
-  - echo $PATH ;  
+  - echo $PATH ;
 
 after_success:
   - cat ${PACKAGE_NAME}.Rcheck/00install.out
