@@ -4,9 +4,10 @@
 \alias{register_lung_mask}
 \title{Lung Registration for Left and Right Lungs}
 \usage{
-register_lung_mask(moving_mask, fixed_mask, moving = NULL, outprefix = NULL,
-  verbose = FALSE, mask_interpolator = "nearestNeighbor",
-  interpolator = "linear", save_memory = TRUE)
+register_lung_mask(moving_mask, fixed_mask, moving = NULL, sides = c("left",
+  "right"), outprefix = NULL, verbose = FALSE,
+  mask_interpolator = "nearestNeighbor", interpolator = "linear",
+  save_memory = TRUE, ...)
 }
 \arguments{
 \item{moving_mask}{Mask of moving image, left has values
@@ -17,6 +18,8 @@ register_lung_mask(moving_mask, fixed_mask, moving = NULL, outprefix = NULL,
 
 \item{moving}{image of moving image, usually CT, will be masked
 by \code{moving_mask}}
+
+\item{sides}{Do both left and right or only one?}
 
 \item{outprefix}{Path to put the transformations,
 passed to \code{\link{antsRegistration}}}
@@ -31,6 +34,8 @@ passed to \code{\link{antsApplyTransforms}}}
 
 \item{save_memory}{do garbage collection and not save intermediate
 files in registration.}
+
+\item{...}{addition arguments to pass to \code{\link{antsRegistration}}}
 }
 \value{
 A list of registrations, transformed images, each for

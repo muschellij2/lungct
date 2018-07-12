@@ -8,7 +8,8 @@ reg_helper = function(
   add_prefix = "_left",
   mask_interpolator = "nearestNeighbor",
   interpolator = "linear",
-  save_memory = TRUE
+  save_memory = TRUE,
+  ...
 ) {
 
   if (is.null(outprefix)) {
@@ -27,7 +28,8 @@ reg_helper = function(
       fixed = fixed_mask,
       moving = moving_mask,
       typeofTransform = "SyN",
-      verbose = verbose)
+      verbose = verbose,
+      ...)
 
     #compose the transforms
     outfile = paste0(outprefix, add_prefix, ".nii.gz")
@@ -89,6 +91,7 @@ reg_helper = function(
 #' 1 and 3 (3 if both left and right), right has values 2 and 3
 #' @param moving image of moving image, usually CT, will be masked
 #' by \code{moving_mask}
+#' @param sides Do both left and right or only one?
 #' @param outprefix Path to put the transformations,
 #' passed to \code{\link{antsRegistration}}
 #' @param verbose Print diagnostic messages
@@ -98,6 +101,7 @@ reg_helper = function(
 #' passed to \code{\link{antsApplyTransforms}}
 #' @param save_memory do garbage collection and not save intermediate
 #' files in registration.
+#' @param ... addition arguments to pass to \code{\link{antsRegistration}}
 #'
 #' @return A list of registrations, transformed images, each for
 #' left and right separately
@@ -107,12 +111,16 @@ register_lung_mask = function(
   moving_mask,
   fixed_mask,
   moving = NULL,
+  sides = c("left", "right"),
   outprefix = NULL,
   verbose = FALSE,
   mask_interpolator = "nearestNeighbor",
   interpolator = "linear",
-  save_memory = TRUE
+  save_memory = TRUE,
+  ...
 ) {
+
+  sides = match.arg(sides, several.ok = TRUE)
   # verbose = FALSE;
   moving_mask = check_ants(moving_mask)
   fixed_mask = check_ants(fixed_mask)
@@ -134,17 +142,26 @@ register_lung_mask = function(
     outprefix = outprefix,
     mask_interpolator = mask_interpolator,
     interpolator = interpolator,
-    save_memory = save_memory)
+    save_memory = save_memory,
+    ...)
 
-  # run left
-  args$add_prefix = "_left"
-  args$value = 1
-  reg_left = do.call("reg_helper", args = args)
+  if ("left" %in% sides) {
+    # run left
+    args$add_prefix = "_left"
+    args$value = 1
+    reg_left = do.call("reg_helper", args = args)
+  } else {
+    reg_left = NULL
+  }
 
-  # run right
-  args$add_prefix = "_right"
-  args$value = 2
-  reg_right = do.call("reg_helper", args = args)
+  if ("right" %in% sides) {
+    # run right
+    args$add_prefix = "_right"
+    args$value = 2
+    reg_right = do.call("reg_helper", args = args)
+  } else {
+    reg_right = NULL
+  }
 
 
   res = list()
