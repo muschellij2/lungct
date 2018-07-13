@@ -85,10 +85,8 @@ reg_helper = function(
 
 #' Lung Registration for Left and Right Lungs
 #'
-#' @param moving_mask Mask of moving image, left has values
-#' 1 and 3 (3 if both left and right), right has values 2 and 3
-#' @param fixed_mask Mask of fixed image, left has values
-#' 1 and 3 (3 if both left and right), right has values 2 and 3
+#' @param moving_mask Mask of moving image, left = 1, right = 2
+#' @param fixed_mask Mask of fixed image, left = 1, right = 2
 #' @param moving image of moving image, usually CT, will be masked
 #' by \code{moving_mask}
 #' @param sides Do both left and right or only one?
