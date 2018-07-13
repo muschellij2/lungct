@@ -31,9 +31,6 @@ template_helper = function(folder_warp,
   template = template * 0.5 + iMath(template, "Sharpen") * 0.5
   if(mask){
     template = template >= 0.5
-    if(sides == "right"){
-      template = template * 2
-    }
   }
 
   if(verbose){
