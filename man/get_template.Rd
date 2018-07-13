@@ -4,15 +4,17 @@
 \alias{get_template}
 \title{Create a lung template from warped images and composite transformations}
 \usage{
-get_template(folder_warp, folder_comp, outfile, gradientStep = 0.2,
-  mask = TRUE, verbose = TRUE)
+get_template(folder_warp, folder_comp, sides = c("left", "right"),
+  outprefix = NULL, gradientStep = 0.2, mask = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{folder_warp}{Folder path for warped images}
 
 \item{folder_comp}{Folder path for composite transformations}
 
-\item{outfile}{File path to save new template}
+\item{sides}{Do both left and right or only one?}
+
+\item{outprefix}{Folder and file path to save new template (don't include extension)}
 
 \item{gradientStep}{Gradient step size}
 
