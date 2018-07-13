@@ -10,8 +10,6 @@
 #' @return Template and its filename
 #' @importFrom ANTsRCore antsAverageImages antsImageWrite antsImageRead antsApplyTransforms iMath
 #' @export
-#'
-#' @examples
 get_template = function(folder_warp,
                         folder_comp,
                         outfile,
