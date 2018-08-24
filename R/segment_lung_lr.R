@@ -14,6 +14,10 @@
 #' @export
 segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
+  # Make all values positive, so 0s are 0s
+  img = img + 1025
+  lthresh = lthresh + 1025
+
   # Segmenting Lung and Airways
   lung_air_mask = segment_lung_airway(img, lthresh = lthresh, verbose = verbose)
 
