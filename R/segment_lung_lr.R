@@ -7,7 +7,7 @@
 #' @param verbose Print diagnostic messages.
 #'
 #' @return Lung mask, with left and right designation, of original CT scan.
-#' Left lung has values = 1, right lung has values = 2, left/right lung overlap
+#' Right lung has values = 1, left lung has values = 2, left/right lung overlap
 #' (i.e. couldn't distinguish the left and right lungs) has values = 3, non-lung = 0.
 #' @importFrom ANTsR maskImage
 #' @importFrom ANTsRCore iMath labelClusters
@@ -77,6 +77,7 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
   left_mask = iMath(left_mask, "MD", 2)
   right_mask = iMath(right_mask, "MD", 2)
   left_right_mask = left_mask + right_mask * 2
+  left_right_mask[left_right_mask == 3] = 0
   left_right_mask[lung_air_mask == 0] = 0
 
   return(left_right_mask)
