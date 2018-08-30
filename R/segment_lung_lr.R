@@ -32,13 +32,13 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
 
   if (verbose) {
-    message("# Removing Airways from Lung")
+    message("# Segmenting Lung: Removing Airways from Lung")
   }
   lung_mask = maskImage(lung_air_mask, 1-air_mask)
   img_masked = maskImage(img, lung_mask)
 
   if (verbose) {
-    message("# Finding Left and Right Lungs")
+    message("# Segmenting Lung: Finding Left and Right Lungs")
   }
   left_right_mask = labelClusters(lung_mask, minClusterSize = 50000)
   n_clus = length(unique(left_right_mask))
@@ -50,14 +50,19 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
   # Left and right lung are still connected
   i = 0
+  j = 0
   lung_mask2 = antsImageClone(lung_mask)
   while(n_clus == 2){
     i = i + 1
-    new_lthresh = lthresh - 25*i
+    new_lthresh = lthresh - 50*i
     if(new_lthresh < 0){
       message("# Error: Can't distinguish left/right lungs, returning left/right combined mask")
       return(lung_mask)
-      }
+    }
+    if(new_lthresh <= 200) {
+      lung_mask2 = iMath(lung_mask2, "ME", 1)
+      j = j + 1
+    }
     img_mask = img_masked < new_lthresh
     lung_mask2[img_mask == 0] = 0
     left_right_mask = labelClusters(lung_mask2, minClusterSize = 50000)
@@ -84,10 +89,10 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
 
     if (verbose) {
-      message("# Finishing Touches")
+      message("# Segmenting Lung: Finishing Touches")
     }
-    left_mask = iMath(left_mask, "MC", 3)
-    right_mask = iMath(right_mask, "MC", 3)
+    left_mask = iMath(left_mask, "MC", 8+2*j)
+    right_mask = iMath(right_mask, "MC", 8+2*j)
     left_right_mask = right_mask + left_mask * 2
     left_right_mask[left_right_mask == 3] = 0
     left_right_mask[lung_air_mask == 0] = 0
