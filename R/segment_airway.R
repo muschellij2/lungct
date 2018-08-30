@@ -13,27 +13,24 @@ segment_airway = function(img, lung_air_mask, verbose = TRUE) {
   if (verbose) {
     message("# Segmenting Airways: Thresholding")
   }
-  lung_air_mask = check_ants(lung_air_mask)
-  img = check_ants(img)
 
   air_mask = antsImageClone(lung_air_mask)
   air = maskImage(img,lung_air_mask)
-  air = air[air>0]
-  air_thres = quantile(air,.05)
+  air_thres = quantile(air[air>0],.04)
   air_mask[img > air_thres] = 0
-  air_mask = iMath(air_mask, "MO", 1)
   air_mask = iMath(air_mask, "MD", 1)
+  air_mask = iMath(air_mask, "MC", 1)
+  dim(air_mask)/3
+  test = antsImageClone(air_mask)
+  test[,]
 
   if (verbose) {
     message("# Segmenting Airways: Connected Components")
   }
   air_mask = labelClusters(air_mask, minClusterSize = 10000)
   n_clus = length(unique(air_mask))
-  if(n_clus == 1){
-    air_mask = antsImageClone(lung_air_mask)
-    air_mask[img > air_thres*.5] = 0
-    air_mask = iMath(air_mask, "MO", 1)
-    air_mask = iMath(air_mask, "MD", 1)
+  if(n_clus == 2){
+    air_mask = iMath(air_mask, "MC", 1)
     air_mask = labelClusters(air_mask, minClusterSize = 10000)
     n_clus = length(unique(air_mask))
   }

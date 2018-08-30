@@ -14,7 +14,6 @@
 segment_lung_airway = function(
   img, lthresh = -300, verbose = TRUE){
 
-  img = check_ants(img)
   # Simple thresholding
   if (verbose) {
     message("# Segmenting Lung and Airways: Thresholding")
@@ -61,7 +60,7 @@ segment_lung_airway = function(
 
     }
   }
-  body_img = iMath(first_img, "MC", 1)
+  body_img = iMath(first_img, "MC", 2)
 
   return(body_img)
 }
