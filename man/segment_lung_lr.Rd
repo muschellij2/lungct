@@ -17,7 +17,7 @@ be used for the initial scan. Default: -300 HU.}
 }
 \value{
 Lung mask, with left and right designation, of original CT scan.
-Left lung has values = 1, right lung has values = 2, left/right lung overlap
+Right lung has values = 1, left lung has values = 2, left/right lung overlap
 (i.e. couldn't distinguish the left and right lungs) has values = 3, non-lung = 0.
 }
 \description{

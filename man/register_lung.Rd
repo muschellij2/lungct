@@ -6,7 +6,8 @@
 \usage{
 register_lung(infile_template, infile_moving, template_masked = TRUE,
   mask_value = 1, typeofTransform = "SyN", outfile_warp = NULL,
-  outfile_comp = NULL, out = FALSE, verbose = TRUE, verbose_reg = FALSE)
+  outfile_comp = NULL, out = FALSE, verbose = TRUE,
+  verbose_reg = FALSE)
 }
 \arguments{
 \item{infile_template}{File path for the template (fixed) image}

@@ -21,7 +21,7 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
   }
   img = resampleImage(img, c(1,1,1))
   # Make all values positive, so 0s are 0s
-  #img = img + 1025
+  img = img + 1025
   lthresh = lthresh + 1025
 
   # Segmenting Lung and Airways
