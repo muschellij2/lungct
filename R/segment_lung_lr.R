@@ -15,7 +15,7 @@
 segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
   orig_img = check_ants(img)
-  img = antsImageClone(img)
+  img = antsImageClone(orig_img)
   if (verbose) {
     message("# Resampling Image to 1x1x1")
   }
