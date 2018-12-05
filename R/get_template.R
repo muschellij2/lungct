@@ -29,7 +29,7 @@ template_helper = function(folder_warp,
     message(paste0("Smoothing ",sides," lung"))
   }
   template = template * 0.5 + iMath(template, "Sharpen") * 0.5
-  if(mask){
+  if (mask){
     template = template >= 0.5
   }
 
@@ -64,9 +64,15 @@ get_template = function(folder_warp,
 {
 
   sides = match.arg(sides, several.ok = TRUE)
-  try(!file.exists(folder_warp), stop("Folder path for warped images does not exist"))
-  try(!file.exists(folder_comp), stop("Folder path for transformations does not exist"))
-  try(!file.exists(dirname(outprefix)), stop("Folder path for new template does not exist"))
+  if (!file.exists(folder_warp)) {
+    stop("Folder path for warped images does not exist")
+  }
+  if (!file.exists(folder_comp)) {
+    stop("Folder path for transformations does not exist")
+  }
+  if (!file.exists(dirname(outprefix))) {
+    stop("Folder path for new template does not exist")
+  }
 
   args = list(
     folder_warp,
