@@ -1,101 +1,132 @@
-#' Register lungs, with options to save warped image and composed transformation
+#' Register lungs, with options to save warped image and
+#' composed transformation
 #'
 #' @param infile_template File path for the template (fixed) image
 #' @param infile_moving File path for the moving image
 #' @param template_masked Logical. Is the template already masked?
 #' @param mask_value Value to mask moving image, and template if necessary
-#' @param typeofTransform Type of transformation for registration
+#' @param typeofTransform Type of transformation for registration,
+#' see \code{\link{antsRegistration}} for options
 #' @param outfile_warp File name to save warped image. If NULL, warped image is not saved to file.
-#' @param outfile_comp File name to save composite transformation. If NULL, transformation is not saved to file.
-#' @param out Logical. Should the registration object be returned?
-#' @param verbose Print messages
-#' @param verbose_reg Print messages, specifically related to registration function
+#' @param outfile_comp File name to save composite transformation. If
+#' \code{NULL}, transformation is not saved to file.
+#' @param interpolator interpolation done after applying transformation,
+#' passed to \code{\link{antsApplyTransforms}}
+#' @param verbose Print messages.  If \code{> 1}, then more verbosity is
+#' output.
+#' @param ... additional arguments to pass to \code{\link{antsRegistration}}
 #'
-#' @return antsRegistration object, if out = TRUE
+#' @return A list with the registration output and warps.
+#'
+#' @importFrom extrantsr check_ants
 #' @importFrom ANTsRCore antsImageRead antsRegistration antsImageWrite antsImageClone antsApplyTransforms
 #' @export
-register_lung = function(infile_template,
-                         infile_moving,
-                         template_masked = TRUE,
-                         mask_value = 1,
-                         typeofTransform = "SyN",
-                         outfile_warp = NULL,
-                         outfile_comp = NULL,
-                         out = FALSE,
-                         verbose = TRUE,
-                         verbose_reg = FALSE)
-{
-
-  if(verbose){
-    message("# Checking if folder/file paths exist")
+register_lung = function(
+  infile_template,
+  infile_moving,
+  template_masked = TRUE,
+  mask_value = c(1, 2),
+  typeofTransform = "SyN",
+  outfile_warp = NULL,
+  outfile_comp = NULL,
+  verbose = TRUE,
+  interpolator = "nearestNeighbor",
+  ...) {
+  if (verbose) {
+    message("# Checking/Reading Imaging data")
   }
-  try(!file.exists(infile_template), stop("File path for template image does not exist"))
-  try(!file.exists(infile_moving), stop("File path for moving image does not exist"))
-  if(!is.null(outfile_warp)){
-    try(!file.exists(dirname(outfile_warp)), stop("Folder path for new warped image does not exist"))
+  orig_fixed = check_ants(infile_template)
+  orig_moving = check_ants(infile_template)
+  if (verbose) {
+    message("# Creating directories for outfiles if necessary")
   }
-  if(!is.null(outfile_comp)){
-    try(!file.exists(dirname(outfile_comp)), stop("Folder path for new composite transformation does not exist"))
+  if (!is.null(outfile_warp)) {
+    dir.create(dirname(outfile_warp),
+               showWarnings = FALSE,
+               recursive = TRUE)
+  }
+  if (!is.null(outfile_comp)) {
+    dir.create(dirname(outfile_comp),
+               showWarnings = FALSE,
+               recursive = TRUE)
   }
 
-
-  if(verbose){
-    message("# Reading in images")
-  }
-  fixed = antsImageRead(infile_template)
-  moving = antsImageRead(infile_moving)
-
-  if(verbose){
+  if (verbose) {
     message("# Masking images")
   }
-  if(!template_masked){
-    fixed = fixed == mask_value
-  }
-  moving = moving == mask_value
 
-  if(verbose){
-    message("# Registering images")
-  }
-  reg = antsRegistration(fixed = fixed,
-                         moving = moving,
-                         typeofTransform = typeofTransform,
-                         verbose = verbose_reg)
-
-  if(!is.null(outfile_warp)){
-    if(verbose){
-      message("# Saving warped image to file")
+  ####################################
+  # Allow this to run for both left and right
+  ####################################
+  L = vector(mode = "list", length = length(mask_value))
+  for (irun in seq_along(mask_value)) {
+    imask_value = mask_value[irun]
+    if (!template_masked) {
+      fixed = orig_fixed == mask_value
+    } else {
+      fixed = antsImageClone(orig_fixed)
     }
-    antsImageWrite(reg$warpedmovout, outfile_warp)
-  }
+    moving = orig_moving == mask_value
 
-  if(!is.null(outfile_comp)){
-
-    if(verbose){
-      message("# Changing pixel type to double")
+    if (verbose) {
+      message("# Registering images")
     }
-    m1 = antsImageClone(moving, out_pixeltype = "double")
-    f1 = antsImageClone(fixed, out_pixeltype = "double")
+    reg = antsRegistration(
+      fixed = fixed,
+      moving = moving,
+      typeofTransform = typeofTransform,
+      verbose = verbose > 1,
+      ...
+    )
 
-
-    if(verbose){
-      message("# Composing transformations")
+    if (!is.null(outfile_warp)) {
+      if (verbose) {
+        message("# Saving warped image to file")
+      }
+      antsImageWrite(reg$warpedmovout, outfile_warp)
     }
-    fn_temp = antsApplyTransforms(fixed = f1,
-                                  moving = m1,
-                                  transformlist = reg$fwdtransform,
-                                  compose = reg$fwdtransform[1])
-    composed = antsImageRead(fn_temp)
 
-    if(verbose){
-      message("# Saving composed transformation to file")
+    if (!is.null(outfile_comp)) {
+      if (verbose) {
+        message("# Changing pixel type to double")
+      }
+      m1 = antsImageClone(moving, out_pixeltype = "double")
+      f1 = antsImageClone(fixed, out_pixeltype = "double")
+
+      if (verbose) {
+        message("# Composing transformations")
+      }
+      fn_temp = antsApplyTransforms(
+        fixed = f1,
+        moving = m1,
+        transformlist = reg$fwdtransform,
+        compose = reg$fwdtransform[1],
+        interpolator = interpolator,
+        verbose = verbose > 1
+      )
+      composed = antsImageRead(fn_temp)
+
+      if (verbose) {
+        message("# Saving composed transformation to file")
+      }
+      antsImageWrite(composed, outfile_comp)
+      rm(fn_temp)
+      rm(m1)
+      rm(f1)
+      rm(composed)
     }
-    antsImageWrite(composed, outfile_comp)
+    sub_L = list(registration = reg)
+    sub_L$warp = outfile_warp
+    sub_L$composed = outfile_comp
+    sub_L$mask_value = imask_value
+    L[[irun]] = sub_L
+    rm(fixed)
+    rm(moving)
+    rm(reg)
+    for (i in 1:10) gc()
   }
-
-  if(out){
-    return(reg)
-  } else{
-    return(NULL)
+  if (length(mask_value) == 1) {
+    L = L[[1]]
   }
-
+  return(L)
 }

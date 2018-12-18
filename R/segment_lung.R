@@ -14,22 +14,30 @@
 #' @importFrom stats median
 #' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
 #' @importFrom ANTsRCore antsImageClone
-segment_lung = function(img,
-                        mask = TRUE,
-                        lthresh = -300,
-                        verbose = TRUE
+segment_lung = function(
+  img,
+  remove_background = FALSE,
+  mask = TRUE,
+  lthresh = -300,
+  verbose = TRUE
 
-                        ) {
+) {
 
   if (verbose) {
     message("# Checking Inputs")
   }
   reg_img = check_ants(img)
+  if (remove_background) {
+    background = iMath(img = reg_img <= -1024,
+                       operation = "GetLargestComponent")
+    reg_img[background == 1] = -Inf
+  }
   img = antsImageClone(reg_img)
   vres = voxdim(reg_img)
   if (verbose) {
     message("# Resampling Image to 1x1x1")
   }
+
   reg_img = resampleImage(reg_img, c(1,1,1))
 
   adder = 1025

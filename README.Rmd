@@ -1,10 +1,22 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
 # lungct
 
-[![Travis-CI Build
-Status](https://travis-ci.org/muschellij2/lungct.svg?branch=master)](https://travis-ci.org/muschellij2/lungct)
+
+[![Travis-CI Build Status](https://travis-ci.org/muschellij2/lungct.svg?branch=master)](https://travis-ci.org/muschellij2/lungct)
+
 
 The goal of lungct is to process Lung CT Scans.
 
@@ -16,6 +28,7 @@ You can install lungct from github with:
 # install.packages("devtools")
 devtools::install_github("muschellij2/lungct")
 ```
+
 
 ## Example
 
