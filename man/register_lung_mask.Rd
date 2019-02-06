@@ -4,8 +4,8 @@
 \alias{register_lung_mask}
 \title{Lung Registration for Left and Right Lungs}
 \usage{
-register_lung_mask(moving_mask, fixed_mask, moving = NULL,
-  sides = c("left", "right"), outprefix = NULL, verbose = FALSE,
+register_lung_mask(moving_mask, fixed_mask, moving = NULL, sides = c("left",
+  "right"), outprefix = NULL, verbose = FALSE,
   mask_interpolator = "nearestNeighbor", interpolator = "linear",
   save_memory = TRUE, ...)
 }

@@ -2,12 +2,13 @@
 % Please edit documentation in R/register_lung.R
 \name{register_lung}
 \alias{register_lung}
-\title{Register lungs, with options to save warped image and composed transformation}
+\title{Register lungs, with options to save warped image and
+composed transformation}
 \usage{
 register_lung(infile_template, infile_moving, template_masked = TRUE,
-  mask_value = 1, typeofTransform = "SyN", outfile_warp = NULL,
-  outfile_comp = NULL, out = FALSE, verbose = TRUE,
-  verbose_reg = FALSE)
+  mask_value = c(1, 2), typeofTransform = "SyN", outfile_warp = NULL,
+  outfile_comp = NULL, verbose = TRUE, interpolator = "nearestNeighbor",
+  ...)
 }
 \arguments{
 \item{infile_template}{File path for the template (fixed) image}
@@ -18,21 +19,26 @@ register_lung(infile_template, infile_moving, template_masked = TRUE,
 
 \item{mask_value}{Value to mask moving image, and template if necessary}
 
-\item{typeofTransform}{Type of transformation for registration}
+\item{typeofTransform}{Type of transformation for registration,
+see \code{\link{antsRegistration}} for options}
 
 \item{outfile_warp}{File name to save warped image. If NULL, warped image is not saved to file.}
 
-\item{outfile_comp}{File name to save composite transformation. If NULL, transformation is not saved to file.}
+\item{outfile_comp}{File name to save composite transformation. If
+\code{NULL}, transformation is not saved to file.}
 
-\item{out}{Logical. Should the registration object be returned?}
+\item{verbose}{Print messages.  If \code{> 1}, then more verbosity is
+output.}
 
-\item{verbose}{Print messages}
+\item{interpolator}{interpolation done after applying transformation,
+passed to \code{\link{antsApplyTransforms}}}
 
-\item{verbose_reg}{Print messages, specifically related to registration function}
+\item{...}{additional arguments to pass to \code{\link{antsRegistration}}}
 }
 \value{
-antsRegistration object, if out = TRUE
+A list with the registration output and warps.
 }
 \description{
-Register lungs, with options to save warped image and composed transformation
+Register lungs, with options to save warped image and
+composed transformation
 }
