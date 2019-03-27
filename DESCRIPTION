@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
-Version: 0.7.3
+Version: 0.7.4
 Authors@R: c(
     person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com",
@@ -18,7 +18,8 @@ Imports:
     ANTsR,
     extrantsr (>= 3.1),
     oro.nifti,
-    neurobase (>= 1.20.5)
+    neurobase (>= 1.20.5),
+    abind
 Remotes: 
     ANTsX/ANTsR,
     ANTsX/ANTsRCore,
@@ -29,4 +30,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
