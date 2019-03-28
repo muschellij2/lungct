@@ -1,4 +1,4 @@
-#' Calculate radiomic features on the whole 3D lung, left and right lungs separately
+#' Calculate individual radiomic features on the whole 3D lung, left and right lungs separately
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format

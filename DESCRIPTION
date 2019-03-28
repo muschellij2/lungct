@@ -19,7 +19,8 @@ Imports:
     extrantsr (>= 3.1),
     oro.nifti,
     neurobase (>= 1.20.5),
-    abind
+    abind,
+    RIA
 Remotes: 
     ANTsX/ANTsR,
     ANTsX/ANTsRCore,
