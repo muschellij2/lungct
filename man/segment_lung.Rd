@@ -10,6 +10,8 @@ segment_lung(img, remove_background = FALSE, mask = TRUE, lthresh = -300,
 \arguments{
 \item{img}{Filename or \code{antsImage}}
 
+\item{remove_background}{should background be removed first?}
+
 \item{mask}{Should the image be masked}
 
 \item{lthresh}{lower threshold for the image}

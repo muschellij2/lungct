@@ -5,6 +5,7 @@
 #' @param mask Should the image be masked
 #' @param lthresh lower threshold for the image
 #' @param verbose Print diagnostic messages
+#' @param remove_background should background be removed first?
 #'
 #' @return List of image, lung, lung mask
 #' @export
