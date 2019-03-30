@@ -4,7 +4,7 @@
 \alias{radiomics_spatial}
 \title{Calculate spatial radiomic features on a 2D or 3D array}
 \usage{
-radiomics_spatial(data, features = c("mi", "gc"))
+radiomics_spatial(data, features = c("mi", "gc", "fd"))
 }
 \arguments{
 \item{data}{Any 2D or 3D image (as matrix or array) to calculate spatial features}

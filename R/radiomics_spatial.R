@@ -6,7 +6,7 @@
 #' @importFrom abind abind
 #' @export
 radiomics_spatial <- function(data,
-                              features = c('mi', 'gc')){
+                              features = c('mi', 'gc', 'fd')){
 
 
   # Figure data dimension
@@ -20,6 +20,9 @@ radiomics_spatial <- function(data,
     if('gc' %in% features){
       gc_value <- geary2D(data)
     }else(gc_value = NULL)
+    if('fd' %in% features){
+      fd_value <- fd2D(data)
+    }else(fd_value = NULL)
 
   }
 
@@ -32,12 +35,16 @@ radiomics_spatial <- function(data,
     if('gc' %in% features){
       gc_value <- geary3D(data)
     }else(gc_value = NULL)
+    if('fd' %in% features){
+      fd_value <- NULL #fd3D(data) # still need to work on this
+    }else(fd_value = NULL)
 
   }
 
   features <- list(
     mi = mi_value,
-    gc = gc_value
+    gc = gc_value,
+    fd = fd_value
   )
 
   return(features)
@@ -228,6 +235,28 @@ geary2D<-function(mat){
 
 
 
+
+
+
+# Calculate fractal dimension in 2D
+fd2D <- function(data) {
+  fdx<-apply(data,1,fd1)
+  fdy<-apply(data,2,fd1)
+  fd<-c(fdx,fdy)
+  fd_sub<-fd[fd<2]
+  FD <- ifelse(length(fd_sub)<100,NA,1 + median(fd_sub,na.rm=T))
+  return(FD)
+}
+fd1<-function(i){
+  n <- length(i)
+  g1 <- abs(i[2:n]-i[1:(n-1)])
+  sumg1<-sum(g1,na.rm=T)/(2*length(g1[is.na(g1)==F]))
+  g2 <- abs(i[3:n]-i[1:(n-2)])
+  sumg2 <-  sum(g2,na.rm=T)/(2*length(g2[is.na(g2)==F]))
+  slope <- sum(log(sumg2)-log(sumg1),na.rm=T)/log(2)
+  fd <- 2-slope
+  return(fd)
+}
 
 
 

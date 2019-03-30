@@ -5,7 +5,8 @@
 \title{Create a lung template from warped images and composite transformations}
 \usage{
 get_template(folder_warp, folder_comp, sides = c("left", "right"),
-  outprefix = NULL, gradientStep = 0.2, mask = TRUE, verbose = TRUE)
+  outprefix = NULL, gradientStep = 0.2, mask = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{folder_warp}{Folder path for warped images}
