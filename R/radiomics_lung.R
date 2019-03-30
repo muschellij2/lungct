@@ -13,7 +13,7 @@ radiomics_lung <- function(img,
                           mask,
                           background_value = NA,
                           featuresFirst = c('mean', 'sd', 'skew', 'kurtosis', 'min', 'q1', 'median', 'q3', 'max','energy', 'rms', 'uniformity', 'entropy'),
-                          featuresSpatial = c('mi', 'gc')){
+                          featuresSpatial = c('mi', 'gc', 'fd')){
 
   # Find unique mask values
   mask_values <- unique(mask)

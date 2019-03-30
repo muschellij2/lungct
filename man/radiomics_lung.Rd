@@ -4,10 +4,9 @@
 \alias{radiomics_lung}
 \title{Calculate individual radiomic features on the whole 3D lung, left and right lungs separately}
 \usage{
-radiomics_lung(img, mask, background_value = NA,
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
-  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
-  featuresSpatial = c("mi", "gc"))
+radiomics_lung(img, mask, background_value = NA, featuresFirst = c("mean",
+  "sd", "skew", "kurtosis", "min", "q1", "median", "q3", "max", "energy", "rms",
+  "uniformity", "entropy"), featuresSpatial = c("mi", "gc", "fd"))
 }
 \arguments{
 \item{img}{CT scan in ANTs image file format}

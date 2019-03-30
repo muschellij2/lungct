@@ -20,7 +20,8 @@ Imports:
     oro.nifti,
     neurobase (>= 1.20.5),
     abind,
-    RIA
+    RIA,
+    data.table
 Remotes: 
     ANTsX/ANTsR,
     ANTsX/ANTsRCore,
