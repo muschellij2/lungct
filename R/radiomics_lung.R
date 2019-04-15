@@ -2,23 +2,18 @@
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param background_value = value of background
-#' @param featuresFirst = first level radiomic features to calculate
-#' @param featuresSpatial = spatial radiomic features to calculate
+#' @param mask_values Values of mask to use for radiomic feature calculation
+#' @param featuresFirst First level radiomic features to calculate
+#' @param featuresSpatial Spatial radiomic features to calculate
 #'
 #' @return Values from selected features for both left and right lungs
 #' @importFrom ANTsR maskImage
 #' @export
 radiomics_lung <- function(img,
                           mask,
-                          background_value = NA,
+                          mask_values = c(1,2),
                           featuresFirst = c('mean', 'sd', 'skew', 'kurtosis', 'min', 'q1', 'median', 'q3', 'max','energy', 'rms', 'uniformity', 'entropy'),
                           featuresSpatial = c('mi', 'gc', 'fd')){
-
-  # Find unique mask values
-  mask_values <- unique(mask)
-  mask_values <- mask_values[-which(mask_values == background_value)]
-
 
   featuresMask <- lapply(mask_values, function(mv){
 

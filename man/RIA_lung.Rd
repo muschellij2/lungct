@@ -4,7 +4,7 @@
 \alias{RIA_lung}
 \title{Using RIA R package, calculate first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately}
 \usage{
-RIA_lung(img, mask, background_value = NA, features = c("fo", "glcm",
+RIA_lung(img, mask, mask_values = c(1, 2), features = c("fo", "glcm",
   "glrlm"), bins_in = 8, equal_prob = FALSE, distance = 1,
   statistic = "mean(X, na.rm = TRUE)", verbose_in = TRUE)
 }
@@ -13,9 +13,9 @@ RIA_lung(img, mask, background_value = NA, features = c("fo", "glcm",
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{background_value}{= value of background}
+\item{mask_values}{Values of mask to use for radiomic feature calculation}
 
-\item{features}{= type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM}
+\item{features}{Type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM}
 
 \item{bins_in}{Number of bins to discretize image}
 

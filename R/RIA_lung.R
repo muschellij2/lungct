@@ -2,8 +2,8 @@
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param background_value = value of background
-#' @param features = type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM
+#' @param mask_values Values of mask to use for radiomic feature calculation
+#' @param features Type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM
 #' @param bins_in Number of bins to discretize image
 #' @param equal_prob logical, indicating to cut data into bins with equal relative frequencies.
 #' If FALSE, then equal interval bins will be used.
@@ -22,17 +22,13 @@
 #' @export
 RIA_lung <- function(img,
                      mask,
-                     background_value = NA,
+                     mask_values = c(1,2),
                      features = c('fo', 'glcm', 'glrlm'),
                      bins_in = 8,
                      equal_prob = FALSE,
                      distance = 1,
                      statistic = "mean(X, na.rm = TRUE)",
                      verbose_in = TRUE){
-
-  # Find unique mask values
-  mask_values <- unique(mask)
-  mask_values <- mask_values[-which(mask_values == background_value)]
 
 
   # Loop through mask values

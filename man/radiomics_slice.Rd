@@ -4,7 +4,7 @@
 \alias{radiomics_slice}
 \title{Calculate radiomic features on the each 2D slice of the whole 3D lung, left and right lungs separately}
 \usage{
-radiomics_slice(img, mask, background_value = NA, plane = "axial",
+radiomics_slice(img, mask, mask_values = c(1, 2), plane = "axial",
   featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
   "q3", "max", "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd"), tidy = TRUE)
@@ -14,7 +14,7 @@ radiomics_slice(img, mask, background_value = NA, plane = "axial",
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{background_value}{Value of background}
+\item{mask_values}{Values of mask to use for radiomic feature calculation}
 
 \item{plane}{One of: axial, coronal, sagittal}
 

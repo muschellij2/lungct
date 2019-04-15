@@ -2,28 +2,23 @@
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param background_value Value of background
+#' @param mask_values Values of mask to use for radiomic feature calculation
 #' @param plane One of: axial, coronal, sagittal
 #' @param featuresFirst First level radiomic features to calculate
 #' @param featuresSpatial Spatial radiomic features to calculate
 #' @param tidy Logical. If true, outputs a tidy dataframe with results. If false, outputs nested loop.
 #'
 #' @return Radiomic values from every slice in both the left and right lungs
-#' @importFrom data.table rbindlist
 #' @export
 #'
 #' @examples
 radiomics_slice <- function(img,
                            mask,
-                           background_value = NA,
+                           mask_values = c(1,2),
                            plane = 'axial',
                            featuresFirst = c('mean', 'sd', 'skew', 'kurtosis', 'min', 'q1', 'median', 'q3', 'max','energy', 'rms', 'uniformity', 'entropy'),
                            featuresSpatial = c('mi', 'gc', 'fd'),
                            tidy = TRUE){
-
-  # Find unique mask values
-  mask_values <- unique(mask)
-  mask_values <- mask_values[-which(mask_values == background_value)]
 
 
   featuresMask <- lapply(mask_values, function(mv){
@@ -46,7 +41,9 @@ radiomics_slice <- function(img,
       npixels <- length(x[!is.na(x)])
       features1 <- radiomics_first(x, featuresFirst)
       features2 <- radiomics_spatial(x, featuresSpatial)
-      features <- c(npixels = npixels, features1, features2)
+      features <- c(features1, features2)
+      features <- features[c(featuresFirst, featuresSpatial)]
+      features <- c(npixels = npixels, features)
       return(features)
     })
     names(features) <- paste0('slic_num_', 1:ndim)
@@ -55,17 +52,22 @@ radiomics_slice <- function(img,
   })
   names(featuresMask) <- paste0('mask',mask_values)
 
+
   if(tidy == TRUE){
     # Make a nice little data frame to output
     test2 = NULL
     for(i in 1:length(featuresMask)){
-      test <- rbindlist(featuresMask[[i]])
-      test <- cbind.data.frame(mask = names(featuresMask)[i],
-                               slic_num = names(featuresMask[[i]]),
+      test <- do.call('rbind', featuresMask[[i]])
+      test <- cbind.data.frame(mask_value = names(featuresMask)[i],
+                               slice_number = names(featuresMask[[i]]),
                                test)
       test2 <- rbind(test2, test)
     }
     featuresMask <- test2
+    rownames(featuresMask) <- c()
+    featuresMask$slice_number <- gsub("slic_num_", "", featuresMask$slice_number)
+    featuresMask$mask_value <- gsub("mask", "", featuresMask$mask_value)
+    featuresMask <- sapply(featuresMask, as.numeric)
   }
 
   return(featuresMask)

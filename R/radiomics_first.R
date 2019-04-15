@@ -60,7 +60,8 @@ radiomics_first <- function(data,
     entropy_value <- entropy(data)
   }else(entropy_value = NULL)
 
-  features <- list(
+
+  featuresList <- list(
     mean = mean_value,
     sd = sd_value,
     skew = skew_value,
@@ -75,8 +76,11 @@ radiomics_first <- function(data,
     uniformity = uniformity_value,
     entropy = entropy_value
   )
+  if(length(features)==1){
+    featuresList = unname(unlist(featuresList[features]))
+  }
 
-  return(features)
+  return(featuresList)
 
 }
 
