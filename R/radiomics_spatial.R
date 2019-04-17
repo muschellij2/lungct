@@ -47,7 +47,7 @@ radiomics_spatial <- function(data,
     fd = fd_value
   )
   if(length(features)==1){
-    featuresList = unname(unlist(featuresList[features]))
+    featuresList = unlist(featuresList[features])
   }
 
   return(featuresList)

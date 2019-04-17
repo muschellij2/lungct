@@ -77,7 +77,7 @@ radiomics_first <- function(data,
     entropy = entropy_value
   )
   if(length(features)==1){
-    featuresList = unname(unlist(featuresList[features]))
+    featuresList = unlist(featuresList[features])
   }
 
   return(featuresList)
