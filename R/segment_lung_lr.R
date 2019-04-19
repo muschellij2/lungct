@@ -23,6 +23,7 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
     # Make all values positive, so 0s are 0s
     img = img + 1025
+    orig_lthresh = lthresh
     lthresh = lthresh + 1025
 
 
@@ -69,7 +70,7 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
         mean_back = mean(apply(as.array(first_img)[,1:10,],2,mean))
         mean_front = mean(apply(as.array(first_img)[,(n_max-9):n_max,],2,mean))
         if(mean_back > .5 | mean_front > .5){
-          first_img = segment_lung(first_img, lthresh = )
+          first_img = segment_lung(orig_img, lthresh = orig_lthresh)
           stop("Can't find lungs beneath background noise. More coding needed")
           }
 
@@ -155,15 +156,30 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
     # Correct number of clusters
     if (n_clus == 3) {
 
-      # This was added in case the background is non-zero
+      # Find which value is the background (Note: this was added because sometimes the background is non-zero)
       left_right_mask = left_right_mask + 1
-      left_right_mask = maskImage(left_right_mask, lung_mask2)
+      fimg <- as.array(left_right_mask)
+      last <- dim(fimg)[1]
+      left <- unique(as.vector(fimg[1,,]))
+      right <- unique(as.vector(fimg[last,,]))
+      both <- c(left,right)
+      # Logic: only the background value will be on both the left and right sides
+      value <- both[duplicated(both)]
+
+      # Make background value 0, and the other two values 1 and 2
+      left_right_mask[left_right_mask == value] <- 0
       num = unique(left_right_mask)
-      if(1 %in% num & 3 %in% num){left_right_mask[left_right_mask==3] <- 2}
-      if(2 %in% num & 3 %in% num){left_right_mask <- left_right_mask - 1}
+      if(1 %in% num & 3 %in% num){
+        left_right_mask[left_right_mask==3] <- 2
+      }
+      if(2 %in% num & 3 %in% num){
+        left_right_mask[left_right_mask==2] <- 1
+        left_right_mask[left_right_mask==3] <- 2
+      }
+
 
       # Find coordinates of left and right clusters
-      coord = sapply(1:3, function(i){
+      coord = sapply(1:2, function(i){
         img = left_right_mask == i
         loc = which(as.array(img) == 1, arr.ind = T)
         x = median(loc[,1])

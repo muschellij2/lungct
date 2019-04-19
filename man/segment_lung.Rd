@@ -4,8 +4,8 @@
 \alias{segment_lung}
 \title{Segment Lungs from CT scans}
 \usage{
-segment_lung(img, remove_background = FALSE, mask = TRUE,
-  lthresh = -300, verbose = TRUE)
+segment_lung(img, remove_background = FALSE, mask = TRUE, lthresh = -300,
+  verbose = TRUE)
 }
 \arguments{
 \item{img}{Filename or \code{antsImage}}
