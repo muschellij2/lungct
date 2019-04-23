@@ -5,8 +5,8 @@
 \title{Calculate radiomic features on the each 2D slice of the whole 3D lung, left and right lungs separately}
 \usage{
 radiomics_slice(img, mask, mask_values = c(1, 2), plane = "axial",
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
-  "q3", "max", "energy", "rms", "uniformity", "entropy"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
+  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd"), tidy = TRUE, reduce = TRUE)
 }
 \arguments{
