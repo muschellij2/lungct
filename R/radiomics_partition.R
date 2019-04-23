@@ -82,7 +82,7 @@ radiomics_partition <- function(img,
 
     # Name partitions and remove NULL partitions
     names(features) <- paste0('partition', 1:dim(partition)[1])
-    # features[sapply(features, is.null)] <- NULL
+    features[sapply(features, is.null)] <- NULL
     return(features)
   })
   names(featuresMask) <- paste0('mask',mask_values)
@@ -117,22 +117,4 @@ radiomics_partition <- function(img,
 
   return(featuresMask)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
