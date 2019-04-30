@@ -71,7 +71,8 @@ segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
         mean_front = mean(apply(as.array(first_img)[,(n_max-9):n_max,],2,mean))
         if(mean_back > .5 | mean_front > .5){
           first_img = segment_lung(orig_img, lthresh = orig_lthresh)
-          stop("Can't find lungs beneath background noise. More coding needed")
+          first_img <- first_img$lung_mask
+          #stop("Can't find lungs beneath background noise. More coding needed")
           }
 
       }
