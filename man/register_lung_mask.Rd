@@ -2,43 +2,40 @@
 % Please edit documentation in R/lungreg_function.R
 \name{register_lung_mask}
 \alias{register_lung_mask}
-\title{Lung Registration for Left and Right Lungs}
+\title{Lung Registration}
 \usage{
 register_lung_mask(moving_mask, fixed_mask, moving = NULL,
-  sides = c("left", "right"), outprefix = NULL, verbose = FALSE,
-  mask_interpolator = "nearestNeighbor", interpolator = "linear",
-  save_memory = TRUE, ...)
+  sides = c("right", "left"), verbose = FALSE, typeofTransform = "SyN",
+  composeTransforms = NULL, mask_interpolator = "nearestNeighbor",
+  interpolator = "linear", ...)
 }
 \arguments{
-\item{moving_mask}{Mask of moving image, left = 1, right = 2}
+\item{moving_mask}{Mask of moving image. Right lung = 1, left lung = 2, non-lung = 0}
 
-\item{fixed_mask}{Mask of fixed image, left = 1, right = 2}
+\item{fixed_mask}{Mask of fixed image. Right lung = 1, left lung = 2, non-lung = 0}
 
-\item{moving}{image of moving image, usually CT, will be masked
-by \code{moving_mask}}
+\item{moving}{Moving image to apply transformation}
 
-\item{sides}{Do both left and right or only one?}
-
-\item{outprefix}{Path to put the transformations,
-passed to \code{\link{antsRegistration}}}
+\item{sides}{Choose to register right and/or left lungs.}
 
 \item{verbose}{Print diagnostic messages}
 
-\item{mask_interpolator}{interpolator used to apply transformation to moving mask,
+\item{typeofTransform}{Type of transform, passed to \code{\link{antsRegistration}}}
+
+\item{composeTransforms}{Prefix of output filename to save the composed forward transformations. The prefix will add comptx.nii.gz to the end.}
+
+\item{mask_interpolator}{Interpolator used to apply transformation to moving mask,
 passed to \code{\link{antsApplyTransforms}}}
 
-\item{interpolator}{interpolator used to apply transformation to image,
+\item{interpolator}{Interpolator used to apply transformation to image,
 passed to \code{\link{antsApplyTransforms}}}
-
-\item{save_memory}{do garbage collection and not save intermediate
-files in registration.}
 
 \item{...}{addition arguments to pass to \code{\link{antsRegistration}}}
 }
 \value{
-A list of registrations, transformed images, each for
-left and right separately
+A list of warped masks, images, and transformations for
+right and left lungs separately
 }
 \description{
-Lung Registration for Left and Right Lungs
+This function registers the right and left lung masks to a template mask. To register to the standard lung template mask, type \code{system.file("extdata", "lung_template_mask.nii.gz", package = "lungct").}
 }

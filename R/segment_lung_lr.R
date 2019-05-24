@@ -1,17 +1,17 @@
-#' Segmentation of left and right lungs from a CT scan
+#' Lung Segmentation
 #'
-#' @param img Original CT scan
+#' This function segments the right and left lungs from a CT scan.
+#'
+#' @param img CT scan in ANTs or NIfTI file format
 #' @param lthresh Threshold used to find the lung and airways,
-#' from the original CT scan. Anything below this threshold will
-#' be used for the initial scan. Default: -300 HU.
+#' from the CT. Default: -300 HU.
 #' @param verbose Print diagnostic messages.
 #'
-#' @return Lung mask, with left and right designation, of original CT scan.
-#' Right lung has values = 1, left lung has values = 2, non-lung = 0.
+#' @return Lung mask in ANTs file format. Right lung = 1, left lung = 2, non-lung = 0
 #' @importFrom ANTsR maskImage
 #' @importFrom ANTsRCore iMath labelClusters makeImage
 #' @export
-segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
+segment_lung2 = function(img, lthresh = -300, verbose = TRUE){
 
     orig_img = check_ants(img)
     img = antsImageClone(orig_img)

@@ -3,130 +3,110 @@ reg_helper = function(
   fixed_mask,
   value = 1,
   moving = NULL,
+  composeTransforms = NULL,
+  add_prefix = "_right_",
   verbose = FALSE,
-  outprefix = NULL,
-  add_prefix = "_left",
+  typeofTransform = "SyN",
   mask_interpolator = "nearestNeighbor",
   interpolator = "linear",
-  save_memory = TRUE,
   ...
 ) {
 
-  if (is.null(outprefix)) {
-    outprefix = tempfile()
-  }
 
-  # Just the left lobe
-  # moving_mask = moving_mask == value | moving_mask == 3
-  # fixed_mask = fixed_mask == value  | fixed_mask == 3
+  # Which lobe
   moving_mask = moving_mask == value
   fixed_mask = fixed_mask == value
 
-  # if any voxels are in left mask
+  # Register lung mask
   if (sum(moving_mask) > 0) {
     reg = antsRegistration(
       fixed = fixed_mask,
       moving = moving_mask,
-      typeofTransform = "SyN",
+      typeofTransform = typeofTransform,
       verbose = verbose,
       ...)
 
-    #compose the transforms
-    outfile = paste0(outprefix, add_prefix, ".nii.gz")
-    composed = antsApplyTransforms(
-      fixed = fixed_mask,
-      moving = moving_mask,
-      transformlist = reg$fwdtransforms,
-      compose = tempfile())
-    file.copy(composed, outfile, overwrite = TRUE)
-
-    transformed_mask = antsApplyTransforms(
-      fixed = fixed_mask,
-      moving = moving_mask,
-      transformlist = outfile,
-      interpolator = mask_interpolator)
-
-    reg$warpedmovout = NULL
-    reg$warpedfixout = NULL
-    for (i in 1:10) {
-      gc();
+    # If composeTransforms in non-null
+    if (!is.null(composeTransforms)){
+      output_prefix = paste0(composeTransforms, add_prefix)
+      fixed_mask = antsImageClone(fixed_mask, out_pixeltype = "double")
+      moving_mask = antsImageClone(moving_mask, out_pixeltype = "double")
+      composed = antsApplyTransforms(fixed = fixed_mask,
+                                    moving = moving_mask,
+                                    transformlist = reg$fwdtransforms,
+                                    compose = output_prefix)
+    } else {
+      composed = NULL
     }
 
+    # If moving image is non-null
     if (!is.null(moving)) {
-      moving = check_ants(moving)
-      image = moving * moving_mask
+
+      # Get images in correct format (otherwise antsApplyTransforms will throw errors)
+      image = maskImage(moving, moving_mask)
+      image = antsImageClone(image, out_pixeltype = "float")
+      fixed_mask = antsImageClone(fixed_mask, out_pixeltype = "double")
+
+      # Apply transformation to moving image
       transformed = antsApplyTransforms(
         fixed = fixed_mask,
         moving = image,
-        transformlist = outfile,
+        transformlist = reg$fwdtransforms,
         interpolator = interpolator)
+
+      # Mask with warped mask and template mask, just to be sure
+      transformed = maskImage(transformed, reg$warpedmovout)
+      transformed = maskImage(transformed, fixed_mask)
     } else {
       transformed = NULL
-      image = NULL
     }
   } else {
     return(NULL)
   }
-  L = list(composed_fwdtransforms = outfile)
-  L$transformed = transformed
-  L$transformed_mask = transformed_mask
-  if (!save_memory) {
-    L$masked_image = image
-    L$moving_mask = moving_mask
-    L$fixed_mask = fixed_mask
-  } else {
-    rm(list = c("image", "moving_mask", "fixed_mask"))
-    for (i in 1:10) {
-      gc();
-    }
-  }
+  L = list(warped_mask = reg$warpedmovout,
+           warped_img = transformed,
+           fwdtransforms = reg$fwdtransforms,
+           composedtransform = composed)
   return(L)
 }
 
-#' Lung Registration for Left and Right Lungs
+#' Lung Registration
 #'
-#' @param moving_mask Mask of moving image, left = 1, right = 2
-#' @param fixed_mask Mask of fixed image, left = 1, right = 2
-#' @param moving image of moving image, usually CT, will be masked
-#' by \code{moving_mask}
-#' @param sides Do both left and right or only one?
-#' @param outprefix Path to put the transformations,
-#' passed to \code{\link{antsRegistration}}
+#' This function registers the right and left lung masks to a template mask. To register to the standard lung template mask, type \code{system.file("extdata", "lung_template_mask.nii.gz", package = "lungct").}
+#'
+#' @param moving_mask Mask of moving image. Right lung = 1, left lung = 2, non-lung = 0
+#' @param fixed_mask Mask of fixed image. Right lung = 1, left lung = 2, non-lung = 0
+#' @param moving Moving image to apply transformation
+#' @param sides Choose to register right and/or left lungs.
 #' @param verbose Print diagnostic messages
-#' @param interpolator interpolator used to apply transformation to image,
+#' @param typeofTransform Type of transform, passed to \code{\link{antsRegistration}}
+#' @param composeTransforms Prefix of output filename to save the composed forward transformations. The prefix will add comptx.nii.gz to the end.
+#' @param mask_interpolator Interpolator used to apply transformation to moving mask,
 #' passed to \code{\link{antsApplyTransforms}}
-#' @param mask_interpolator interpolator used to apply transformation to moving mask,
+#' @param interpolator Interpolator used to apply transformation to image,
 #' passed to \code{\link{antsApplyTransforms}}
-#' @param save_memory do garbage collection and not save intermediate
-#' files in registration.
 #' @param ... addition arguments to pass to \code{\link{antsRegistration}}
 #'
-#' @return A list of registrations, transformed images, each for
-#' left and right separately
+#' @return A list of warped masks, images, and transformations for
+#' right and left lungs separately
 #' @importFrom ANTsRCore antsRegistration antsApplyTransforms
 #' @export
 register_lung_mask = function(
   moving_mask,
   fixed_mask,
   moving = NULL,
-  sides = c("left", "right"),
-  outprefix = NULL,
+  sides = c("right", "left"),
   verbose = FALSE,
+  typeofTransform = "SyN",
+  composeTransforms = NULL,
   mask_interpolator = "nearestNeighbor",
   interpolator = "linear",
-  save_memory = TRUE,
   ...
 ) {
 
   sides = match.arg(sides, several.ok = TRUE)
-  # verbose = FALSE;
   moving_mask = check_ants(moving_mask)
   fixed_mask = check_ants(fixed_mask)
-
-
-  if (is.null(outprefix)) {
-    outprefix = tempfile()
-  }
   if (!is.null(moving)) {
     moving = check_ants(moving)
   }
@@ -137,36 +117,35 @@ register_lung_mask = function(
     fixed_mask = fixed_mask,
     moving = moving,
     verbose = verbose,
-    outprefix = outprefix,
+    typeofTransform = typeofTransform,
+    composeTransforms = composeTransforms,
     mask_interpolator = mask_interpolator,
     interpolator = interpolator,
-    save_memory = save_memory,
     ...)
 
-  if ("left" %in% sides) {
-    # run left
-    args$add_prefix = "_left"
-    args$value = 1
-    reg_left = do.call("reg_helper", args = args)
-  } else {
-    reg_left = NULL
-  }
 
   if ("right" %in% sides) {
     # run right
-    args$add_prefix = "_right"
-    args$value = 2
+    args$add_prefix = "_right_"
+    args$value = 1
     reg_right = do.call("reg_helper", args = args)
   } else {
     reg_right = NULL
   }
 
 
+  if ("left" %in% sides) {
+    # run left
+    args$add_prefix = "_left_"
+    args$value = 2
+    reg_left = do.call("reg_helper", args = args)
+  } else {
+    reg_left = NULL
+  }
+
+
   res = list()
-  res$reg_left = reg_left
-  res$reg_right = reg_right
-  res$interpolator = interpolator
-  res$mask_interpolator = mask_interpolator
-  res$outprefix = outprefix
+  res$right = reg_right
+  res$left = reg_left
   return(res)
 }

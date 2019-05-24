@@ -1,7 +1,6 @@
 template_helper = function(folder_warp,
                            folder_comp,
                            sides = sides,
-                           outprefix = NULL,
                            gradientStep = 0.2,
                            mask = TRUE,
                            verbose = TRUE)
@@ -33,31 +32,26 @@ template_helper = function(folder_warp,
     template = template >= 0.5
   }
 
-  if(verbose){
-    message(paste0("Saving new template for ",sides," lung"))
-  }
-  outfile = paste0(outprefix,"_",sides,".nii.gz")
-  antsImageWrite(template, outfile)
-  return(list(template = template, template_file = outfile))
+  return(template)
 }
 
-#' Create a lung template from warped images and composite transformations
+#' Lung Template Creation
+#'
+#' Create a new lung template from warped images and composite transformations. If the DSC < 0.99, more iterations should be performed.
 #'
 #' @param folder_warp Folder path for warped images
 #' @param folder_comp Folder path for composite transformations
 #' @param sides Do both left and right or only one?
-#' @param outprefix Folder and file path to save new template (don't include extension)
 #' @param gradientStep Gradient step size
-#' @param mask Logical statement. TRUE if outfile should be binary.
+#' @param mask Logical statement. TRUE if template should be binary.
 #' @param verbose Print output messages
 #'
-#' @return Template and its filename
+#' @return New Template. Right lung = 1, left lung = 2, non-lung = 0.
 #' @importFrom ANTsRCore antsAverageImages antsImageWrite antsImageRead antsApplyTransforms iMath
 #' @export
 get_template = function(folder_warp,
                         folder_comp,
-                        sides = c("left", "right"),
-                        outprefix = NULL,
+                        sides = c("right", "left"),
                         gradientStep = 0.2,
                         mask = TRUE,
                         verbose = TRUE)
@@ -70,25 +64,13 @@ get_template = function(folder_warp,
   if (!file.exists(folder_comp)) {
     stop("Folder path for transformations does not exist")
   }
-  if (!file.exists(dirname(outprefix))) {
-    stop("Folder path for new template does not exist")
-  }
 
   args = list(
     folder_warp,
     folder_comp,
-    outprefix = outprefix,
     gradientStep = gradientStep,
     mask = mask,
     verbose = verbose)
-
-  if ("left" %in% sides) {
-    # run left
-    args$sides = "left"
-    template_left = do.call("template_helper", args = args)
-  } else {
-    template_left = NULL
-  }
 
   if ("right" %in% sides) {
     # run right
@@ -98,9 +80,18 @@ get_template = function(folder_warp,
     template_right = NULL
   }
 
+  if ("left" %in% sides) {
+    # run left
+    args$sides = "left"
+    template_left = do.call("template_helper", args = args)
+  } else {
+    template_left = NULL
+  }
+
   res = list()
-  res$template_left = template_left
   res$template_right = template_right
+  res$template_left = template_left
+  res$template = template_right + 2*template_left
   return(res)
 
 }

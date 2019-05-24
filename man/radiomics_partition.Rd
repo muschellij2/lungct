@@ -2,11 +2,11 @@
 % Please edit documentation in R/radiomics_partition.R
 \name{radiomics_partition}
 \alias{radiomics_partition}
-\title{Calculate radiomic features on the partitioned 3D lung}
+\title{Radiomic Calculation on Partitioned Lung}
 \usage{
-radiomics_partition(img, mask, mask_values = c(1, 2),
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
-  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
+radiomics_partition(img, mask, sides = c("right", "left"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
+  "q3", "max", "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd"), partition = NULL,
   kernel_size = c(30, 30, 30), kernel_stride = c(30, 30, 30),
   threshold = 1000, tidy = TRUE)
@@ -16,7 +16,7 @@ radiomics_partition(img, mask, mask_values = c(1, 2),
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{mask_values}{Values of mask to use for radiomic feature calculation}
+\item{sides}{Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0}
 
 \item{featuresFirst}{First level radiomic features to calculate}
 

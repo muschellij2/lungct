@@ -1,8 +1,10 @@
+#' Radiomic Calculation on Lung CTs
+#'
 #' Calculate individual radiomic features on the whole 3D lung, left and right lungs separately
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param mask_values Values of mask to use for radiomic feature calculation
+#' @param sides Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0
 #' @param featuresFirst First level radiomic features to calculate
 #' @param featuresSpatial Spatial radiomic features to calculate
 #'
@@ -11,11 +13,14 @@
 #' @export
 radiomics_lung <- function(img,
                           mask,
-                          mask_values = c(1,2),
+                          sides = c("right", "left"),
                           featuresFirst = c('mean', 'sd', 'skew', 'kurtosis', 'min', 'q1', 'median', 'q3', 'max','energy', 'rms', 'uniformity', 'entropy'),
                           featuresSpatial = c('mi', 'gc', 'fd')){
 
-  featuresMask <- lapply(mask_values, function(mv){
+  featuresMask <- lapply(sides, function(side){
+
+    if(side == "right"){mv = 1}
+    if(side == "left"){mv = 2}
 
     # Put image in array format and remove non-mask values
     img2 <- as.array(img)
@@ -27,7 +32,7 @@ radiomics_lung <- function(img,
     features2 <- radiomics_spatial(img2, featuresSpatial)
     return(c(features1, features2))
   })
-  names(featuresMask) <- paste0('mask',mask_values)
+  names(featuresMask) <- sides
 
   return(featuresMask)
 }

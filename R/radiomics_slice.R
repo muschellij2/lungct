@@ -1,21 +1,23 @@
-#' Calculate radiomic features on the each 2D slice of the whole 3D lung, left and right lungs separately
+#' Radiomic Calculation on CT Slices
+#'
+#' Calculate radiomic features on the each 2D slice of the whole 3D lung, right and left lungs separately
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param mask_values Values of mask to use for radiomic feature calculation
+#' @param sides Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0
 #' @param plane One of: axial, coronal, sagittal
 #' @param featuresFirst First level radiomic features to calculate
 #' @param featuresSpatial Spatial radiomic features to calculate
 #' @param tidy Logical. If true, outputs a tidy dataframe with results. If false, outputs nested loop.
 #' @param reduce Logical. If true, reduces the dimensions of the scan based on extent of mask using reduce_scan.
 #'
-#' @return Radiomic values from every slice in both the left and right lungs
+#' @return Radiomic values from every slice in both the right and left lungs
 #' @export
 #'
 #' @examples
 radiomics_slice <- function(img,
                            mask,
-                           mask_values = c(1,2),
+                           sides = c("right", "left"),
                            plane = 'axial',
                            featuresFirst = c('mean', 'sd', 'skew', 'kurtosis', 'min', 'q1', 'median', 'q3', 'max','energy', 'rms', 'uniformity', 'entropy'),
                            featuresSpatial = c('mi', 'gc', 'fd'),
@@ -23,7 +25,10 @@ radiomics_slice <- function(img,
                            reduce = TRUE){
 
 
-  featuresMask <- lapply(mask_values, function(mv){
+  featuresMask <- lapply(sides, function(side){
+
+    if(side == "right"){mv = 1}
+    if(side == "left"){mv = 2}
 
     mask2 <- mask == mv
 
@@ -67,7 +72,7 @@ radiomics_slice <- function(img,
 
     return(features)
   })
-  names(featuresMask) <- paste0('mask',mask_values)
+  names(featuresMask) <- sides
 
 
   if(tidy == TRUE){
@@ -75,11 +80,10 @@ radiomics_slice <- function(img,
     test2 = NULL
     for(i in 1:length(featuresMask)){
       test <- do.call('rbind', featuresMask[[i]])
-      test <- cbind.data.frame(mask_value = names(featuresMask)[i],
+      test <- cbind.data.frame(lung = names(featuresMask)[i],
                                slice_number = names(featuresMask[[i]]),
                                test)
       test$slice_number <- gsub("slic_num_", "", test$slice_number)
-      test$mask_value <- gsub("mask", "", test$mask_value)
       test <- as.data.frame(sapply(test, as.numeric))
       nslic <- dim(test)[1]
       test$slice_percent <- test$slice_number/nslic * 100
