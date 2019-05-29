@@ -2,19 +2,19 @@
 % Please edit documentation in R/radiomics_slice.R
 \name{radiomics_slice}
 \alias{radiomics_slice}
-\title{Calculate radiomic features on the each 2D slice of the whole 3D lung, left and right lungs separately}
+\title{Radiomic Calculation on CT Slices}
 \usage{
-radiomics_slice(img, mask, mask_values = c(1, 2), plane = "axial",
+radiomics_slice(img, mask, sides = c("right", "left"), plane = "axial",
   featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
   "q3", "max", "energy", "rms", "uniformity", "entropy"),
-  featuresSpatial = c("mi", "gc", "fd"), tidy = TRUE)
+  featuresSpatial = c("mi", "gc", "fd"), tidy = TRUE, reduce = TRUE)
 }
 \arguments{
 \item{img}{CT scan in ANTs image file format}
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{mask_values}{Values of mask to use for radiomic feature calculation}
+\item{sides}{Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0}
 
 \item{plane}{One of: axial, coronal, sagittal}
 
@@ -23,10 +23,12 @@ radiomics_slice(img, mask, mask_values = c(1, 2), plane = "axial",
 \item{featuresSpatial}{Spatial radiomic features to calculate}
 
 \item{tidy}{Logical. If true, outputs a tidy dataframe with results. If false, outputs nested loop.}
+
+\item{reduce}{Logical. If true, reduces the dimensions of the scan based on extent of mask using reduce_scan.}
 }
 \value{
-Radiomic values from every slice in both the left and right lungs
+Radiomic values from every slice in both the right and left lungs
 }
 \description{
-Calculate radiomic features on the each 2D slice of the whole 3D lung, left and right lungs separately
+Calculate radiomic features on the each 2D slice of the whole 3D lung, right and left lungs separately
 }

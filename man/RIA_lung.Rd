@@ -2,9 +2,9 @@
 % Please edit documentation in R/RIA_lung.R
 \name{RIA_lung}
 \alias{RIA_lung}
-\title{Using RIA R package, calculate first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately}
+\title{Calculate first-order, GLCM, and/or GLRLM radiomic features on the whole 3D lung}
 \usage{
-RIA_lung(img, mask, mask_values = c(1, 2), features = c("fo", "glcm",
+RIA_lung(img, mask, sides = c("right", "left"), features = c("fo", "glcm",
   "glrlm"), bins_in = 8, equal_prob = FALSE, distance = 1,
   statistic = "mean(X, na.rm = TRUE)", verbose_in = TRUE)
 }
@@ -13,7 +13,7 @@ RIA_lung(img, mask, mask_values = c(1, 2), features = c("fo", "glcm",
 
 \item{mask}{Mask of CT scan in ANTs image file format}
 
-\item{mask_values}{Values of mask to use for radiomic feature calculation}
+\item{sides}{Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0}
 
 \item{features}{Type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM}
 
@@ -38,5 +38,5 @@ Most prints can also be suppressed using the \code{\link{suppressMessages}} func
 list containing the statistical information
 }
 \description{
-Using RIA R package, calculate first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately
+This is a wrapper for \code{RIA} R package. It calculates first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately
 }

@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_template.R
 \name{get_template}
 \alias{get_template}
-\title{Create a lung template from warped images and composite transformations}
+\title{Lung Template Creation}
 \usage{
-get_template(folder_warp, folder_comp, sides = c("left", "right"),
-  outprefix = NULL, gradientStep = 0.2, mask = TRUE, verbose = TRUE)
+get_template(folder_warp, folder_comp, sides = c("right", "left"),
+  gradientStep = 0.2, mask = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{folder_warp}{Folder path for warped images}
@@ -14,17 +14,15 @@ get_template(folder_warp, folder_comp, sides = c("left", "right"),
 
 \item{sides}{Do both left and right or only one?}
 
-\item{outprefix}{Folder and file path to save new template (don't include extension)}
-
 \item{gradientStep}{Gradient step size}
 
-\item{mask}{Logical statement. TRUE if outfile should be binary.}
+\item{mask}{Logical statement. TRUE if template should be binary.}
 
 \item{verbose}{Print output messages}
 }
 \value{
-Template and its filename
+New Template. Right lung = 1, left lung = 2, non-lung = 0.
 }
 \description{
-Create a lung template from warped images and composite transformations
+Create a new lung template from warped images and composite transformations. If the DSC < 0.99, more iterations should be performed.
 }

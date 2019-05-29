@@ -1,8 +1,10 @@
-#' Using RIA R package, calculate first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately
+#' Calculate first-order, GLCM, and/or GLRLM radiomic features on the whole 3D lung
+#'
+#' This is a wrapper for \code{RIA} R package. It calculates first-order, GLCM, and/or GLRLM on the whole 3D lung, left and right lungs separately
 #'
 #' @param img CT scan in ANTs image file format
 #' @param mask Mask of CT scan in ANTs image file format
-#' @param mask_values Values of mask to use for radiomic feature calculation
+#' @param sides Choose to calculate radiomic features on the right and/or left lungs. Note: Right lung = 1, left lung = 2, non-lung = 0
 #' @param features Type of radiomic features to calculate. Options: first-order, GLCM, and/or GLRLM
 #' @param bins_in Number of bins to discretize image
 #' @param equal_prob logical, indicating to cut data into bins with equal relative frequencies.
@@ -22,7 +24,7 @@
 #' @export
 RIA_lung <- function(img,
                      mask,
-                     mask_values = c(1,2),
+                     sides = c("right", "left"),
                      features = c('fo', 'glcm', 'glrlm'),
                      bins_in = 8,
                      equal_prob = FALSE,
@@ -32,7 +34,10 @@ RIA_lung <- function(img,
 
 
   # Loop through mask values
-  featuresMask <- lapply(mask_values, function(mv){
+  featuresMask <- lapply(sides, function(side){
+
+    if(side == "right"){mv = 1}
+    if(side == "left"){mv = 2}
 
     # Put image in array format and remove non-mask values
     data <- as.array(img)
@@ -96,7 +101,7 @@ RIA_lung <- function(img,
 
     return(features)
   })
-  names(featuresMask) <- paste0('mask',mask_values)
+  names(featuresMask) <- sides
 
   return(featuresMask)
 }
