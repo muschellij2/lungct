@@ -11,9 +11,6 @@
 #'
 #' @return Jacobian Image
 #' @importFrom ANTsR createJacobianDeterminantImage maskImage
-#' @export
-#'
-#' @examples
 jacobian_lung = function(
   right_transformation,
   left_transformation,
