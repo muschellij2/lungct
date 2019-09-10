@@ -40,8 +40,8 @@ before_install:
   - cmake --version
   - export ants_user=ANTsX
   - echo "Installing Missing Deps ITKR"
-  - install_missing_remote_deps ${ants_user}/ITKR
-  - gh_binary_install ${ants_user}/ITKR ;
+  - install_missing_remote_deps stnava/ITKR
+  - gh_binary_install stnava/ITKR ;
   - if [[ "${PACKAGE_NAME}" != "ITKR" ]];
     then
       echo "Installing Missing Deps ANTsRCore" ;
