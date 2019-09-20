@@ -14,7 +14,6 @@
 #' @return Radiomic values from every slice in both the right and left lungs
 #' @export
 #'
-#' @examples
 radiomics_slice <- function(img,
                            mask,
                            sides = c("right", "left"),

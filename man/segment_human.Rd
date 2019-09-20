@@ -4,7 +4,7 @@
 \alias{segment_human}
 \title{Segment Human from CT scans}
 \usage{
-segment_human(img, adder = 1025, lthresh = -300, verbose = TRUE)
+segment_human(img, adder = 1025, lthresh = -300, verbose = TRUE, ...)
 }
 \arguments{
 \item{img}{Filename or \code{antsImage}}
@@ -14,6 +14,8 @@ segment_human(img, adder = 1025, lthresh = -300, verbose = TRUE)
 \item{lthresh}{lower threshold for the image}
 
 \item{verbose}{Print diagnostic messages}
+
+\item{...}{arguments passed to \code{\link{check_ants}}}
 }
 \value{
 List of smoothed image, body, adder

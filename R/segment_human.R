@@ -4,6 +4,7 @@
 #' @param img Filename or \code{antsImage}
 #' @param adder amount to be added to the image to make non-zero
 #' @param lthresh lower threshold for the image
+#' @param ... arguments passed to \code{\link{check_ants}}
 #' @param verbose Print diagnostic messages
 #'
 #' @return List of smoothed image, body, adder
@@ -12,9 +13,10 @@ segment_human = function(
   img,
   adder = 1025,
   lthresh = -300,
-  verbose = TRUE
+  verbose = TRUE,
+  ...
 ) {
-  reg_img = check_ants(img)
+  reg_img = check_ants(img, ...)
   ##############################
   # 1024 should be lower limit
   ##############################

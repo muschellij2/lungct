@@ -5,8 +5,8 @@
 \title{Radiomic Calculation on CT Slices}
 \usage{
 radiomics_slice(img, mask, sides = c("right", "left"), plane = "axial",
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
-  "q3", "max", "energy", "rms", "uniformity", "entropy"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
+  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd"), tidy = TRUE, reduce = TRUE)
 }
 \arguments{

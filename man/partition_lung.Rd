@@ -4,8 +4,8 @@
 \alias{partition_lung}
 \title{Partition the lung}
 \usage{
-partition_lung(img, kernel_size = c(30, 30, 30), kernel_stride = c(30, 30,
-  30), centroid = TRUE)
+partition_lung(img, kernel_size = c(30, 30, 30), kernel_stride = c(30,
+  30, 30), centroid = TRUE)
 }
 \arguments{
 \item{img}{Lung scan to be partitioned. Can be in 3D matrix or ANTs image file format.}

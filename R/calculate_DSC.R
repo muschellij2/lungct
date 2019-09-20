@@ -23,8 +23,6 @@ DSC <- function(x,y){
 #'
 #' @return DSC on whole lung, right lung and left lung.
 #' @export
-#'
-#' @examples
 calculate_DSC <- function(template0, template1, sides = c("right","left")){
 
   # Overall DSC

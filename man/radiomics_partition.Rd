@@ -5,8 +5,8 @@
 \title{Radiomic Calculation on Partitioned Lung}
 \usage{
 radiomics_partition(img, mask, sides = c("right", "left"),
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median",
-  "q3", "max", "energy", "rms", "uniformity", "entropy"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
+  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd"), partition = NULL,
   kernel_size = c(30, 30, 30), kernel_stride = c(30, 30, 30),
   threshold = 1000, tidy = TRUE)
