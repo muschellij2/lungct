@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
-Version: 0.7.5
+Version: 0.7.6
 Authors@R: c(
     person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com",
@@ -19,7 +19,8 @@ Imports:
     extrantsr (>= 3.1),
     oro.nifti,
     neurobase (>= 1.20.5),
-    abind,
+    abind
+Suggests:
     RIA
 Remotes: 
     ANTsX/ANTsR,

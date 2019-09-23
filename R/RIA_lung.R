@@ -20,8 +20,8 @@
 #' Most prints can also be suppressed using the \code{\link{suppressMessages}} function.
 #'
 #' @return list containing the statistical information
-#' @importFrom RIA first_order discretize glcm_all glcm_stat glcm_stat_all glrlm_all glrlm_stat glrlm_stat_all
 #' @export
+# #' @importFrom RIA first_order discretize glcm_all glcm_stat glcm_stat_all glrlm_all glrlm_stat glrlm_stat_all
 RIA_lung <- function(img,
                      mask,
                      sides = c("right", "left"),
@@ -32,7 +32,9 @@ RIA_lung <- function(img,
                      statistic = "mean(X, na.rm = TRUE)",
                      verbose_in = TRUE){
 
-
+  if (!requireNamespace("RIA", quietly = TRUE)) {
+    stop("RIA package required for RIA_lung")
+  }
   # Loop through mask values
   featuresMask <- lapply(sides, function(side){
 
@@ -67,29 +69,29 @@ RIA_lung <- function(img,
 
     # Calculate first order radiomic features
     if('fo' %in% features){
-      RIA_image <- first_order(RIA_image, use_type = "single", use_orig = TRUE, verbose_in = verbose_in)
+      RIA_image <- RIA::first_order(RIA_image, use_type = "single", use_orig = TRUE, verbose_in = verbose_in)
     }
 
 
     # Discretize image
     if('glcm' %in% features | 'glrlm' %in% features){
-      RIA_image <- discretize(RIA_image, bins_in=bins_in, equal_prob = equal_prob, verbose_in = verbose_in)
+      RIA_image <- RIA::discretize(RIA_image, bins_in=bins_in, equal_prob = equal_prob, verbose_in = verbose_in)
 
       # Calculate GLCM radiomic features
       if('glcm' %in% features){
         for (i in 1: length(distance)) {
-          RIA_image <- glcm_all(RIA_image, use_type = "discretized", distance = distance[i], verbose_in = verbose_in)
+          RIA_image <- RIA::glcm_all(RIA_image, use_type = "discretized", distance = distance[i], verbose_in = verbose_in)
         }
-        RIA_image <- glcm_stat(RIA_image, use_type = "glcm", verbose_in = verbose_in)
-        RIA_image <- glcm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
+        RIA_image <- RIA::glcm_stat(RIA_image, use_type = "glcm", verbose_in = verbose_in)
+        RIA_image <- RIA::glcm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
       }
 
 
       # Calculate GLRLM radiomic features
       if('glrlm' %in% features){
-        RIA_image <- glrlm_all(RIA_image, use_type = "discretized", verbose_in = verbose_in)
-        RIA_image <- glrlm_stat(RIA_image, use_type = "glrlm", verbose_in = verbose_in)
-        RIA_image <- glrlm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
+        RIA_image <- RIA::glrlm_all(RIA_image, use_type = "discretized", verbose_in = verbose_in)
+        RIA_image <- RIA::glrlm_stat(RIA_image, use_type = "glrlm", verbose_in = verbose_in)
+        RIA_image <- RIA::glrlm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
       }else{RIA_image$stat_glrlm_mean <- NULL}
     }
 
