@@ -53,6 +53,7 @@ before_install:
       gh_binary_install ${ants_user}/ANTsR ;
     fi
   - cat DESCRIPTION
+  - install_rgl_deps ;  
   - install_remotes_no_dep
   - cat DESCRIPTION
   - echo $PATH ;
