@@ -3,8 +3,6 @@ language: r
 sudo: false
 cache: packages
 warnings_are_errors: true
-use_bioc: true
-bioc_required: true
 cran: http://cran.rstudio.com
 
 os:
