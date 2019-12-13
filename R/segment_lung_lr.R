@@ -11,7 +11,7 @@
 #' @importFrom ANTsR maskImage
 #' @importFrom ANTsRCore iMath labelClusters makeImage
 #' @export
-segment_lung2 = function(img, lthresh = -300, verbose = TRUE){
+segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 
     orig_img = check_ants(img)
     img = antsImageClone(orig_img)

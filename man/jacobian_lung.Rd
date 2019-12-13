@@ -4,8 +4,14 @@
 \alias{jacobian_lung}
 \title{Calculate Jacobian Determinant Image for the Lungs}
 \usage{
-jacobian_lung(right_transformation, left_transformation, mask,
-  doLog = TRUE, geom = FALSE, relative = TRUE)
+jacobian_lung(
+  right_transformation,
+  left_transformation,
+  mask,
+  doLog = TRUE,
+  geom = FALSE,
+  relative = TRUE
+)
 }
 \arguments{
 \item{right_transformation}{Transformations for the right lung}

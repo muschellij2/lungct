@@ -4,8 +4,14 @@
 \alias{get_template}
 \title{Lung Template Creation}
 \usage{
-get_template(folder_warp, folder_comp, sides = c("right", "left"),
-  gradientStep = 0.2, mask = TRUE, verbose = TRUE)
+get_template(
+  folder_warp,
+  folder_comp,
+  sides = c("right", "left"),
+  gradientStep = 0.2,
+  mask = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{folder_warp}{Folder path for warped images}

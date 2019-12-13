@@ -4,9 +4,17 @@
 \alias{RIA_lung}
 \title{Calculate first-order, GLCM, and/or GLRLM radiomic features on the whole 3D lung}
 \usage{
-RIA_lung(img, mask, sides = c("right", "left"), features = c("fo",
-  "glcm", "glrlm"), bins_in = 8, equal_prob = FALSE, distance = 1,
-  statistic = "mean(X, na.rm = TRUE)", verbose_in = TRUE)
+RIA_lung(
+  img,
+  mask,
+  sides = c("right", "left"),
+  features = c("fo", "glcm", "glrlm"),
+  bins_in = 8,
+  equal_prob = FALSE,
+  distance = 1,
+  statistic = "mean(X, na.rm = TRUE)",
+  verbose_in = TRUE
+)
 }
 \arguments{
 \item{img}{CT scan in ANTs image file format}

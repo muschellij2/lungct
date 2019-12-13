@@ -4,10 +4,18 @@
 \alias{register_lung_mask}
 \title{Lung Registration}
 \usage{
-register_lung_mask(moving_mask, fixed_mask, moving = NULL,
-  sides = c("right", "left"), verbose = FALSE,
-  typeofTransform = "SyN", composeTransforms = NULL,
-  mask_interpolator = "nearestNeighbor", interpolator = "linear", ...)
+register_lung_mask(
+  moving_mask,
+  fixed_mask,
+  moving = NULL,
+  sides = c("right", "left"),
+  verbose = FALSE,
+  typeofTransform = "SyN",
+  composeTransforms = NULL,
+  mask_interpolator = "nearestNeighbor",
+  interpolator = "linear",
+  ...
+)
 }
 \arguments{
 \item{moving_mask}{Mask of moving image. Right lung = 1, left lung = 2, non-lung = 0}

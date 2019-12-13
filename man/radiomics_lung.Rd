@@ -4,10 +4,14 @@
 \alias{radiomics_lung}
 \title{Radiomic Calculation on Lung CTs}
 \usage{
-radiomics_lung(img, mask, sides = c("right", "left"),
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1",
-  "median", "q3", "max", "energy", "rms", "uniformity", "entropy"),
-  featuresSpatial = c("mi", "gc", "fd"))
+radiomics_lung(
+  img,
+  mask,
+  sides = c("right", "left"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median", "q3",
+    "max", "energy", "rms", "uniformity", "entropy"),
+  featuresSpatial = c("mi", "gc", "fd")
+)
 }
 \arguments{
 \item{img}{CT scan in ANTs image file format}

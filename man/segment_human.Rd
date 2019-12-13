@@ -4,8 +4,14 @@
 \alias{segment_human}
 \title{Segment Human from CT scans}
 \usage{
-segment_human(img, adder = 1025, lthresh = -300, verbose = TRUE,
-  smooth = TRUE, ...)
+segment_human(
+  img,
+  adder = 1025,
+  lthresh = -300,
+  verbose = TRUE,
+  smooth = TRUE,
+  ...
+)
 }
 \arguments{
 \item{img}{Filename or \code{antsImage}}
