@@ -47,7 +47,7 @@ template_helper = function(folder_warp,
 #' @param verbose Print output messages
 #'
 #' @return New Template. Right lung = 1, left lung = 2, non-lung = 0.
-#' @importFrom ANTsRCore antsAverageImages antsImageWrite antsImageRead antsApplyTransforms iMath
+#' @importFrom ANTsR antsAverageImages antsImageWrite antsImageRead iMath antsApplyTransforms
 #' @export
 get_template = function(folder_warp,
                         folder_comp,

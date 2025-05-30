@@ -9,7 +9,7 @@
 #'
 #' @return Lung mask in ANTs file format. Right lung = 1, left lung = 2, non-lung = 0
 #' @importFrom ANTsR maskImage
-#' @importFrom ANTsRCore iMath labelClusters makeImage
+#' @importFrom ANTsR iMath labelClusters makeImage
 #' @export
 segment_lung_lr = function(img, lthresh = -300, verbose = TRUE){
 

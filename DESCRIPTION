@@ -1,7 +1,7 @@
 Package: lungct
 Type: Package
 Title: Processing of Lung Computed Tomography ('CT') Scans
-Version: 0.7.6.1
+Version: 0.7.6.2
 Authors@R: c(
     person("John", "Muschelli", role = c("aut", "cre"), email =
     "muschellij2@gmail.com",
@@ -32,4 +32,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
-RoxygenNote: 7.0.1
+RoxygenNote: 7.3.2

@@ -13,8 +13,7 @@
 #' @importFrom neurobase zero_pad maskEmptyImageDimensions mask_img
 #' @importFrom oro.nifti voxdim
 #' @importFrom stats median
-#' @importFrom ANTsRCore resampleImage iMath smoothImage as.antsImage
-#' @importFrom ANTsRCore antsImageClone
+#' @importFrom ANTsR resampleImage iMath smoothImage as.antsImage antsImageClone
 segment_lung = function(
   img,
   remove_background = FALSE,
