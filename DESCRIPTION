@@ -14,7 +14,6 @@ Imports:
     methods,
     stats,
     ptinpoly,
-    ANTsRCore (>= 0.3.4),
     ANTsR,
     extrantsr (>= 3.1),
     oro.nifti,
@@ -22,7 +21,6 @@ Imports:
     abind
 Remotes: 
     ANTsX/ANTsR,
-    ANTsX/ANTsRCore,
     muschellij2/extrantsr,
     muschellij2/neurobase
 License: GPL-2

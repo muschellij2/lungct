@@ -45,18 +45,24 @@ RIA_lung <- function(img,
     mask2 <- as.array(mask)
     data[mask2 != mv] <- NA
 
+    no_na_sum = function(x) {
+      sum(x, na.rm = TRUE)
+    }
     # Crop image to speed up computation
-    test <- apply(data, 1, function(x){sum(x, na.rm=T)})
+    test <- apply(data, 1, no_na_sum)
     data <- data[which(test != 0),,]
-    test <- apply(data, 2, function(x){sum(x, na.rm=T)})
+    test <- apply(data, 2, no_na_sum)
     data <- data[,which(test != 0),]
-    test <- apply(data, 3, function(x){sum(x, na.rm=T)})
+    test <- apply(data, 3, no_na_sum)
     data <- data[,,which(test != 0)]
 
     ###create RIA_image structure
     RIA_image <- list(data = NULL, header = list(), log = list())
     if(length(dim(data)) == 3 | length(dim(data)) == 2) {class(RIA_image) <- append(class(RIA_image), "RIA_image")
-    } else {stop(paste0("ANTsImage LOADED IS ", length(dim(data)), " DIMENSIONAL. ONLY 2D AND 3D DATA ARE SUPPORTED!"))}
+    } else {
+      stop(paste0("ANTsImage LOADED IS ", length(dim(data)),
+                  " DIMENSIONAL. ONLY 2D AND 3D DATA ARE SUPPORTED!"))
+    }
     RIA_image$data$orig  <- data
     RIA_image$data$modif <- NULL
     class(RIA_image$header) <- append(class(RIA_image$header), "RIA_header")
@@ -68,30 +74,32 @@ RIA_lung <- function(img,
 
     # Calculate first order radiomic features
     if('fo' %in% features){
-      RIA_image <- RIA::first_order(RIA_image, use_type = "single", use_orig = TRUE, verbose_in = verbose_in)
+      RIA_image <- RIA:::first_order(RIA_image, use_type = "single", use_orig = TRUE, verbose_in = verbose_in)
     }
 
 
     # Discretize image
     if('glcm' %in% features | 'glrlm' %in% features){
-      RIA_image <- RIA::discretize(RIA_image, bins_in=bins_in, equal_prob = equal_prob, verbose_in = verbose_in)
+      RIA_image <- RIA:::discretize(RIA_image, bins_in=bins_in, equal_prob = equal_prob, verbose_in = verbose_in)
 
       # Calculate GLCM radiomic features
       if('glcm' %in% features){
         for (i in 1: length(distance)) {
-          RIA_image <- RIA::glcm_all(RIA_image, use_type = "discretized", distance = distance[i], verbose_in = verbose_in)
+          RIA_image <- RIA:::glcm_all(RIA_image, use_type = "discretized", distance = distance[i], verbose_in = verbose_in)
         }
-        RIA_image <- RIA::glcm_stat(RIA_image, use_type = "glcm", verbose_in = verbose_in)
-        RIA_image <- RIA::glcm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
+        RIA_image <- RIA:::glcm_stat(RIA_image, use_type = "glcm", verbose_in = verbose_in)
+        RIA_image <- RIA:::glcm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
       }
 
 
       # Calculate GLRLM radiomic features
-      if('glrlm' %in% features){
-        RIA_image <- RIA::glrlm_all(RIA_image, use_type = "discretized", verbose_in = verbose_in)
-        RIA_image <- RIA::glrlm_stat(RIA_image, use_type = "glrlm", verbose_in = verbose_in)
-        RIA_image <- RIA::glrlm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
-      }else{RIA_image$stat_glrlm_mean <- NULL}
+      if ('glrlm' %in% features){
+        RIA_image <- RIA:::glrlm_all(RIA_image, use_type = "discretized", verbose_in = verbose_in)
+        RIA_image <- RIA:::glrlm_stat(RIA_image, use_type = "glrlm", verbose_in = verbose_in)
+        RIA_image <- RIA:::glrlm_stat_all(RIA_image, statistic = statistic, verbose_in = verbose_in)
+      } else{
+        RIA_image$stat_glrlm_mean <- NULL
+      }
     }
 
 

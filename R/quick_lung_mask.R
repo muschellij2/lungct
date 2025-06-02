@@ -1,7 +1,6 @@
 #' @rdname segment_lung
 #' @export
-#' @importFrom ANTsR connectedThreshold maskImage
-#' @importFrom ANTsRCore iMath
+#' @importFrom ANTsR connectedThreshold maskImage iMath
 quick_lung_mask = function(img,
                            lthresh = -300) {
   img = check_ants(img)
