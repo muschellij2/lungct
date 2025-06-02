@@ -21,7 +21,6 @@
 #'
 #' @return list containing the statistical information
 #' @export
-# #' @importFrom RIA first_order discretize glcm_all glcm_stat glcm_stat_all glrlm_all glrlm_stat glrlm_stat_all
 RIA_lung <- function(img,
                      mask,
                      sides = c("right", "left"),

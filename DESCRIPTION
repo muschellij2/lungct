@@ -20,8 +20,6 @@ Imports:
     oro.nifti,
     neurobase (>= 1.20.5),
     abind
-Suggests:
-    RIA
 Remotes: 
     ANTsX/ANTsR,
     ANTsX/ANTsRCore,
@@ -33,3 +31,5 @@ LazyData: true
 URL: https://github.com/muschellij2/lungct
 BugReports: https://github.com/muschellij2/lungct/issues
 RoxygenNote: 7.3.2
+Suggests: 
+    RIA
