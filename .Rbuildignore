@@ -6,3 +6,4 @@
 ^\./\.travis\.yml\.bak$
 ^appveyor\.yml$
 R/quick_lung_mask.R
+^\.github$
