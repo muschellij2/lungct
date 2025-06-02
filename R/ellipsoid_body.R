@@ -5,7 +5,7 @@
 #'
 #' @return Array or \code{antsImage} object
 #' @export
-#' @importFrom ANTsRCore is.antsImage
+#' @importFrom ANTsR is.antsImage
 #' @importFrom stats cov
 ellipsoid_body = function(x) {
   bb = as.array(x)

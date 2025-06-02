@@ -8,8 +8,8 @@ radiomics_lung(
   img,
   mask,
   sides = c("right", "left"),
-  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median", "q3",
-    "max", "energy", "rms", "uniformity", "entropy"),
+  featuresFirst = c("mean", "sd", "skew", "kurtosis", "min", "q1", "median", "q3", "max",
+    "energy", "rms", "uniformity", "entropy"),
   featuresSpatial = c("mi", "gc", "fd")
 )
 }

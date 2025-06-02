@@ -89,7 +89,7 @@ reg_helper = function(
 #'
 #' @return A list of warped masks, images, and transformations for
 #' right and left lungs separately
-#' @importFrom ANTsRCore antsRegistration antsApplyTransforms
+#' @importFrom ANTsR antsRegistration antsApplyTransforms
 #' @export
 register_lung_mask = function(
   moving_mask,
